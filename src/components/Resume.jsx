@@ -2,32 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Briefcase, GraduationCap, Award, Download } from 'lucide-react';
 
-const timelineItems = [
-  {
-    type: 'work',
-    icon: <Briefcase size={20} />,
-    date: '2021 - Present',
-    title: 'Senior Full Stack Developer',
-    company: 'Tech Innovators Inc.',
-    description: 'Leading development of enterprise applications using React and Flask.',
-  },
-  {
-    type: 'education',
-    icon: <GraduationCap size={20} />,
-    date: '2017 - 2021',
-    title: 'BSc in Computer Science',
-    company: 'University of Technology',
-    description: 'Graduated with First Class Honours, specializing in Software Engineering.',
-  },
-  {
-    type: 'award',
-    icon: <Award size={20} />,
-    date: '2022',
-    title: 'Innovation Award',
-    company: 'Tech Excellence Awards',
-    description: 'Recognized for outstanding contributions to open-source development.',
-  },
-];
+const timelineItems = [];
 
 const Resume = () => {
   return (
@@ -42,7 +17,7 @@ const Resume = () => {
         >
           <h2 className="text-3xl font-bold mb-4">Experience & Education</h2>
           <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-8">
-            My professional journey and academic background in technology and software development.
+            My journey and academic background in technology and software development.
           </p>
           <a
             href="/resume.pdf"

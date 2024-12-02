@@ -11,14 +11,14 @@ const Hero = () => {
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover z-0"
+        className="absolute inset-0 w-full h-full object-cover z-0 filter brightness-50"
       >
         <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-800 to-black opacity-80 z-10"></div>
 
       {/* Content */}
       <div className="relative z-20 container mx-auto px-4 py-16">
@@ -38,36 +38,39 @@ const Hero = () => {
             <div className="flex justify-center lg:justify-start gap-4 mb-8">
               <a
                 href="#projects"
-                className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-colors"
+                className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-all"
               >
                 View Projects
               </a>
               <a
                 href="#contact"
-                className="border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white px-6 py-3 rounded-lg transition-colors"
+                className="border-2 border-green-600 text-green-600 hover:bg-green-600 hover:text-white px-6 py-3 rounded-lg transition-all"
               >
                 Contact Me
               </a>
             </div>
             <div className="flex justify-center lg:justify-start gap-6">
               <a
-                href="https://github.com"
+                href="https://github.com/nahashon-source"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="GitHub"
                 className="text-gray-400 hover:text-green-400 transition-colors"
               >
                 <GithubIcon size={24} />
               </a>
               <a
-                href="https://linkedin.com"
+                href="https://linkedin.com/in/Nahashon-Mwendwa"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="LinkedIn"
                 className="text-gray-400 hover:text-green-400 transition-colors"
               >
                 <LinkedinIcon size={24} />
               </a>
               <a
-                href="mailto:contact@nahashon.dev"
+                href="mailto:contact@nashonmwendwa0@gmail.com"
+                aria-label="Email"
                 className="text-gray-400 hover:text-green-400 transition-colors"
               >
                 <MailIcon size={24} />
@@ -93,7 +96,7 @@ const Hero = () => {
           transition={{ delay: 1, duration: 0.6 }}
           className="absolute bottom-8 left-1/2 transform -translate-x-1/2"
         >
-          <a href="#about" className="animate-bounce block">
+          <a href="#about" className="animate-bounce block" aria-label="Scroll Down">
             <ArrowDownIcon className="text-gray-400" size={32} />
           </a>
         </motion.div>
