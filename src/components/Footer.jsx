@@ -85,10 +85,10 @@ const Footer = () => {
             <address className="not-italic">
               <p className="text-gray-600 dark:text-gray-300 mb-2">Nairobi, Kenya</p>
               <p className="text-gray-600 dark:text-gray-300 mb-2">
-                <a href="tel:+254700000000">+254 (700) 000-000</a>
+                <a href="tel:+254700000000">+254 (783) 384-516</a>
               </p>
               <p className="text-gray-600 dark:text-gray-300">
-                <a href="mailto:contact@nahashon.dev">contact@nahashon.dev</a>
+                <a href="mailto:contact@nahashon.dev">contact@nashonmwendwa04@gmail.com</a>
               </p>
             </address>
           </div>
