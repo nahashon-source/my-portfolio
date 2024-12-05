@@ -84,7 +84,7 @@ const Hero = () => {
             className="lg:w-1/2"
           >
             <img
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=500&fit=crop"
+              src="/public/images/profile.jpeg"
               alt="Nahashon Mwendwa"
               className="rounded-full w-64 h-64 lg:w-80 lg:h-80 object-cover mx-auto shadow-xl"
             />
