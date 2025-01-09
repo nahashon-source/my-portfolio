@@ -11,7 +11,7 @@ const skillCategories = [
   {
     title: 'Backend',
     icon: <Terminal size={24} />,
-    skills: ['Python', 'Flask', 'Node.js', 'REST APIs', ''],
+    skills: ['Python', 'Flask', 'Node.js', 'REST APIs', 'PHP' , 'WORDPRESS'],
   },
   {
     title: 'Database',
@@ -31,7 +31,7 @@ const skillCategories = [
   {
     title: 'Languages',
     icon: <Globe size={24} />,
-    skills: ['JavaScript', 'Python', 'SQL', 'HTML', 'CSS'],
+    skills: ['JavaScript', 'Python', 'SQL', 'HTML', 'CSS', 'PHP']
   },
 ];
 
