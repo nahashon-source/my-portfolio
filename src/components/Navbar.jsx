@@ -1,99 +1,5 @@
-// import React, { useState, useEffect } from 'react';
-// import { Moon, Sun, Menu, X } from 'lucide-react';
-
-// const Navbar = () => {
-//   const [isDark, setIsDark] = useState(false);
-//   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-//   useEffect(() => {
-//     if (isDark) {
-//       document.documentElement.classList.add('dark');
-//     } else {
-//       document.documentElement.classList.remove('dark');
-//     }
-//   }, [isDark]);
-
-//   const navItems = [
-//     { label: 'About', href: '#about' },
-//     { label: 'Projects', href: '#projects' },
-//     { label: 'Skills', href: '#skills' },
-//     { label: 'Resume', href: '#resume' },
-//     { label: 'Contact', href: '#contact' },
-//   ];
-
-//   return (
-//     <nav className="fixed w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm z-50">
-//       <div className="container mx-auto px-4">
-//         <div className="flex items-center justify-between h-16">
-//           <a href="#" className="text-xl font-bold text-green-600">NM</a>
-          
-//           <div className="hidden md:flex items-center space-x-8">
-//             {navItems.map((item) => (
-//               <a
-//                 key={item.label}
-//                 href={item.href}
-//                 className="text-gray-600 hover:text-green-600 dark:text-gray-300 dark:hover:text-green-400 transition-colors"
-//               >
-//                 {item.label}
-//               </a>
-//             ))}
-//             <button
-//               onClick={() => setIsDark(!isDark)}
-//               className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-//             >
-//               {isDark ? <Sun size={20} /> : <Moon size={20} />}
-//             </button>
-//           </div>
-
-//           <div className="md:hidden flex items-center">
-//             <button
-//               onClick={() => setIsMenuOpen(!isMenuOpen)}
-//               className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-//             >
-//               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-
-//       {/* Mobile menu */}
-//       {isMenuOpen && (
-//         <div className="md:hidden">
-//           <div className="px-2 pt-2 pb-3 space-y-1">
-//             {navItems.map((item) => (
-//               <a
-//                 key={item.label}
-//                 href={item.href}
-//                 className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
-//                 onClick={() => setIsMenuOpen(false)}
-//               >
-//                 {item.label}
-//               </a>
-//             ))}
-//             <button
-//               onClick={() => setIsDark(!isDark)}
-//               className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
-//             >
-//               {isDark ? 'Light Mode' : 'Dark Mode'}
-//             </button>
-//           </div>
-//         </div>
-//       )}
-//     </nav>
-//   );
-// };
-
-// export default Navbar;
-
-
-
-
-
-
-
-
 import React, { useState, useEffect, useRef } from "react";
-import { Moon, Sun, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 const NAV_ITEMS = [
   { label: "About", href: "#about" },
@@ -104,113 +10,89 @@ const NAV_ITEMS = [
 ];
 
 const Navbar = () => {
-  const [isDark, setIsDark] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const menuRef = useRef(null);
 
-  // Load theme from system preference/localStorage
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      setIsDark(savedTheme === "dark");
-    } else {
-      setIsDark(window.matchMedia("(prefers-color-scheme: dark)").matches);
-    }
-  }, []);
-
-  // Apply theme changes
-  useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [isDark]);
-
-  // Close menu on outside click
   useEffect(() => {
     const handler = (e) => {
       if (menuRef.current && !menuRef.current.contains(e.target)) {
         setIsMenuOpen(false);
       }
     };
-    if (isMenuOpen) {
-      document.addEventListener("mousedown", handler);
-    }
+    document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = isMenuOpen ? "hidden" : "auto";
   }, [isMenuOpen]);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <nav className="fixed w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm z-50 border-b border-gray-200 dark:border-gray-700">
+    <nav
+      role="navigation"
+      className={`fixed w-full backdrop-blur-sm z-50 border-b transition bg-gray-900/80 ${
+        scrolled ? "shadow-md border-gray-700" : "border-gray-800"
+      }`}
+    >
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Logo / Branding */}
           <a
             href="#"
-            className="text-2xl font-extrabold text-green-600 tracking-wide hover:opacity-90 transition"
+            className="text-2xl font-extrabold tracking-wide hover:scale-105 transition-transform"
           >
-            <span className="text-gray-900 dark:text-white">Na</span>
+            <span className="text-white">Na</span>
             <span className="text-green-600">hashon</span>
           </a>
 
-          {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
             {NAV_ITEMS.map((item) => (
               <a
                 key={item.label}
                 href={item.href}
-                className="text-gray-600 hover:text-green-600 dark:text-gray-300 dark:hover:text-green-400 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500 rounded"
+                className="text-gray-300 hover:text-green-400 transition-colors"
               >
                 {item.label}
               </a>
             ))}
-            <button
-              aria-label="Toggle dark mode"
-              onClick={() => setIsDark(!isDark)}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
-            >
-              {isDark ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
           </div>
 
-          {/* Mobile Toggle */}
-          <div className="md:hidden flex items-center">
-            <button
-              aria-label="Toggle menu"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-green-500"
-            >
-              {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-          </div>
+          <button
+            aria-label="Toggle menu"
+            aria-expanded={isMenuOpen}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden p-2 rounded-lg hover:bg-gray-800"
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
       {isMenuOpen && (
         <div
+          id="mobile-menu"
           ref={menuRef}
-          className="md:hidden bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 shadow-md animate-slideDown"
+          className="md:hidden bg-gray-900 border-t border-gray-700 shadow-md animate-slideDown"
         >
           <div className="px-4 pt-4 pb-6 space-y-2">
             {NAV_ITEMS.map((item) => (
               <a
                 key={item.label}
                 href={item.href}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-green-400 dark:hover:bg-gray-800 transition focus:outline-none focus:ring-2 focus:ring-green-500"
                 onClick={() => setIsMenuOpen(false)}
+                className="block px-3 py-2 rounded-md text-gray-300 hover:text-green-400"
               >
                 {item.label}
               </a>
             ))}
-            <button
-              onClick={() => setIsDark(!isDark)}
-              className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-green-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:text-green-400 dark:hover:bg-gray-800 transition focus:outline-none focus:ring-2 focus:ring-green-500"
-            >
-              {isDark ? "Light Mode" : "Dark Mode"}
-            </button>
           </div>
         </div>
       )}

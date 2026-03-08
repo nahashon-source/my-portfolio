@@ -1,87 +1,26 @@
-// import React from 'react';
-// import { motion } from 'framer-motion';
-// import { ExternalLink, Github } from 'lucide-react';
-
-// const ProjectCard = ({ project }) => {
-//   return (
-//     <motion.div
-//       initial={{ opacity: 0, y: 20 }}
-//       whileInView={{ opacity: 1, y: 0 }}
-//       transition={{ duration: 0.5 }}
-//       viewport={{ once: true }}
-//       className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
-//     >
-//       <div className="relative group">
-//         <img
-//           src={project.image}
-//           alt={project.title}
-//           className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-//         />
-//         <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center space-x-4">
-//           <a
-//             href={project.liveUrl}
-//             target="_blank"
-//             rel="noopener noreferrer"
-//             className="p-2 bg-white rounded-full hover:bg-green-100 transition-colors"
-//           >
-//             <ExternalLink size={20} className="text-gray-900" />
-//           </a>
-//           <a
-//             href={project.githubUrl}
-//             target="_blank"
-//             rel="noopener noreferrer"
-//             className="p-2 bg-white rounded-full hover:bg-green-100 transition-colors"
-//           >
-//             <Github size={20} className="text-gray-900" />
-//           </a>
-//         </div>
-//       </div>
-      
-//       <div className="p-6">
-//         <h3 className="text-xl font-semibold mb-2 text-gray-900 dark:text-white">
-//           {project.title}
-//         </h3>
-//         <p className="text-gray-600 dark:text-gray-300 mb-4">
-//           {project.description}
-//         </p>
-//         <div className="flex flex-wrap gap-2">
-//           {project.tags.map((tag) => (
-//             <span
-//               key={tag}
-//               className="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 text-sm rounded-full"
-//             >
-//               {tag}
-//             </span>
-//           ))}
-//         </div>
-//       </div>
-//     </motion.div>
-//   );
-// };
-
-// export default ProjectCard;
-
-
-
-
-
-
-// src/components/ProjectCard.jsx
 import React from "react";
 import { motion } from "framer-motion";
 import { FiExternalLink, FiGithub } from "react-icons/fi";
 
-const ProjectCard = ({ project }) => {
-  if (!project) return null; // safeguard
+// Map of tag names to colors for badges
+const tagColors = {
+  React: "bg-blue-200 text-blue-800 dark:bg-blue-800 dark:text-blue-200",
+  "Next.js": "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200",
+  "Node.js": "bg-green-200 text-green-800 dark:bg-green-800 dark:text-green-200",
+  Express: "bg-gray-300 text-gray-900 dark:bg-gray-600 dark:text-gray-100",
+  MongoDB: "bg-green-300 text-green-900 dark:bg-green-700 dark:text-green-100",
+  "PostgreSQL": "bg-indigo-200 text-indigo-900 dark:bg-indigo-700 dark:text-indigo-200",
+  Flask: "bg-white text-black dark:bg-gray-700 dark:text-white",
+  Stripe: "bg-purple-200 text-purple-900 dark:bg-purple-700 dark:text-purple-200",
+  Axios: "bg-yellow-200 text-yellow-900 dark:bg-yellow-700 dark:text-yellow-200",
+  "Material-UI": "bg-teal-200 text-teal-900 dark:bg-teal-700 dark:text-teal-200",
+  Javascript: "bg-yellow-300 text-yellow-900 dark:bg-yellow-700 dark:text-yellow-200",
+};
 
-  const {
-    title = "Untitled Project",
-    description = "No description available.",
-    image = "/placeholder.png",
-    tags = [],
-    liveUrl,
-    githubUrl,
-  } = project;
+const ProjectCard = ({ project }) => {
+  if (!project) return null;
+
+  const { title, description, image, tags = [], liveUrl, githubUrl } = project;
 
   return (
     <motion.div
@@ -109,18 +48,18 @@ const ProjectCard = ({ project }) => {
         </p>
 
         {/* Tags */}
-        {tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-4">
-            {tags.map((tag, index) => (
-              <span
-                key={index}
-                className="text-xs bg-gray-200 dark:bg-gray-700 px-2 py-1 rounded-full text-gray-700 dark:text-gray-300"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
-        )}
+        <div className="flex flex-wrap gap-2 mt-4">
+          {tags.map((tag, idx) => (
+            <span
+              key={idx}
+              className={`px-3 py-1.5 rounded-full text-sm ${
+                tagColors[tag] || "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
+              }`}
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
 
         {/* Links */}
         <div className="flex gap-4 mt-5">

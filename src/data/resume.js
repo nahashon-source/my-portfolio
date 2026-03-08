@@ -1,44 +1,5 @@
-{/* <a
-  href="/Nahashon_Mwendwa_CV.pdf"  // This will link to the PDF file in the public folder
-  className="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors"
->
-  <Download size={20} className="mr-2" />
-  View Resume
-</a> */}
-
-// data/resume.js
-// import { Briefcase, GraduationCap, Award } from 'lucide-react';
-
-// // Timeline data using icon *components* (not JSX)
-// export const timelineItems = [
-//   {
-//     icon: GraduationCap, // ✅ just pass the component
-//     date: '2025',
-//     title: 'Software Engineer',
-//     company: 'Moringa School',
-//     description: 'Focused on software engineering, and Database Management.'
-//   },
-//   {
-//     icon: Briefcase,
-//     date: 'May 2025 - Aug 2025',
-//     title: 'Software Development Intern',
-//     company: 'Freight In Time',
-//     description: 'Worked on frontend and backend tasks using , php and Laravel.'
-//   },
-//   {
-//     icon: Award,
-//     date: 'Dec 2023',
-//     title: 'Best Developer Award',
-//     company: 'Moringa School',
-//     description: 'Recognized for building an end-to-end full-stack application during my period there.'
-//   }
-// ];
-
-
-
-
 // src/data/resume.js
-import { Briefcase, GraduationCap, Award } from 'lucide-react';
+import { Briefcase, GraduationCap } from 'lucide-react';
 
 // Timeline data (education, experience, achievements)
 export const timelineItems = [
@@ -49,18 +10,18 @@ export const timelineItems = [
     company: 'Moringa School',
     description: 'Focused on software engineering fundamentals, database management, and full-stack development.'
   },
-  {
-    icon: Briefcase,
-    date: 'May 2025 - Aug 2025',
-    title: 'Software Development Intern',
-    company: 'Freight In Time',
-    description: 'Worked on frontend and backend development tasks using PHP and Laravel, and supported system integration.'
-  },
-  {
-    icon: Award,
-    date: 'Dec 2023',
-    title: 'Best Developer Award',
-    company: 'Moringa School',
-    description: 'Recognized for building an end-to-end full-stack application during the training program.'
-  }
+{
+  icon: Briefcase,
+  date: 'May 2025 – Present',
+  title: 'Software Developer (Intern → Full-time)',
+  company: 'Freight In Time',
+  description: 'Worked as an intern for 8 months and then got hired as a full-time developer.',
+  highlights: [
+    'Revenue integration and quotation system built with PHP, Laravel, SQL Server, and stored procedures.',
+    'Azure user management system: create users for multiple applications at once, assign roles/functions/offices, sync users from Odoo, and disable accounts.',
+    'Automated email system for customers.',
+    'Login tracker to monitor user activity across systems.',
+    'Additional internal tools to optimize workflows and system monitoring.'
+  ]
+}
 ];

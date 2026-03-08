@@ -10,7 +10,7 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+    <div className="min-h-screen bg-black text-white">
       <Navbar />
       <Hero />
       <About />
@@ -24,11 +24,3 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-
-
