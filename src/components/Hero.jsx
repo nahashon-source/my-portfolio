@@ -1,33 +1,34 @@
 import React from "react";
 import { motion } from "framer-motion";
 import {
-  GithubIcon,
-  LinkedinIcon,
-  MailIcon,
-  ArrowDownIcon,
+  Github,
+  Linkedin,
+  Mail,
+  ArrowDown,
+  MapPin,
 } from "lucide-react";
 
 const socialLinks = [
   {
     href: "https://github.com/nahashon-source",
     label: "GitHub",
-    icon: GithubIcon,
+    icon: Github,
   },
   {
     href: "https://linkedin.com/in/Nahashon-Mwendwa",
     label: "LinkedIn",
-    icon: LinkedinIcon,
+    icon: Linkedin,
   },
   {
-    href: "mailto:contact@nashonmwendwa0@gmail.com",
+    href: "mailto:nashonmwendwa0@gmail.com",
     label: "Email",
-    icon: MailIcon,
+    icon: Mail,
   },
 ];
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gray-900 overflow-hidden">
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-black">
 
       {/* Background Video */}
       <video
@@ -35,89 +36,152 @@ const Hero = () => {
         loop
         muted
         playsInline
-        preload="none"
-        aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover z-0 brightness-50"
+        className="absolute inset-0 h-full w-full object-cover brightness-50"
       >
         <source src="/video/hero.mp4" type="video/mp4" />
       </video>
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-gray-900/60 to-black/80 z-10" />
+      <div className="absolute inset-0 bg-black/70" />
 
-      <div className="relative z-20 container mx-auto px-6 py-16">
+      <div className="relative z-10 container mx-auto px-6 py-20">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
 
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
+          {/* Left */}
+          <div className="text-center lg:text-left">
 
-          {/* Text */}
-          <div className="lg:w-1/2 text-center lg:text-left">
+            {/* Availability */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="
+                inline-flex items-center
+                px-4 py-2
+                rounded-full
+                bg-green-500/10
+                border border-green-500/20
+                text-green-400
+                mb-6
+              "
+            >
+              <MapPin size={16} className="mr-2" />
+              Nairobi, Kenya • Available for opportunities
+            </motion.div>
 
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
               className="text-green-400 font-medium mb-3"
             >
               Hello, I'm
             </motion.p>
 
             <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-5xl lg:text-6xl font-bold text-white mb-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="
+                text-5xl md:text-6xl lg:text-7xl
+                font-bold text-white mb-4
+              "
             >
-              Nahashon Mwendwa
+              Nahashon
+              <span className="text-green-500">
+                {" "}Mwendwa
+              </span>
             </motion.h1>
 
             <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="text-xl lg:text-2xl text-gray-300 mb-6"
+              className="
+                text-2xl md:text-3xl
+                text-gray-300 mb-6
+              "
             >
-              Full-Stack Developer • React • Flask • PostgreSQL
+              Full-Stack Developer
             </motion.h2>
 
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
-              className="text-gray-400 mb-8 max-w-lg"
+              className="
+                text-lg text-gray-400
+                max-w-xl leading-relaxed mb-8
+              "
             >
-              I build fast, scalable web applications and APIs with modern
-              technologies and clean architecture.
+              I build scalable web applications, enterprise systems,
+              APIs, and digital experiences using modern technologies
+              and clean architecture.
             </motion.p>
 
+            {/* Stats */}
+            <div className="flex justify-center lg:justify-start gap-8 mb-8">
+              <div>
+                <h3 className="text-3xl font-bold text-green-500">
+                  9+
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  Projects
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-3xl font-bold text-green-500">
+                  2+
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  Years Learning
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-3xl font-bold text-green-500">
+                  15+
+                </h3>
+                <p className="text-gray-400 text-sm">
+                  Technologies
+                </p>
+              </div>
+            </div>
+
             {/* Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="flex justify-center lg:justify-start gap-4 mb-8"
-            >
+            <div className="flex flex-wrap justify-center lg:justify-start gap-4 mb-8">
               <a
                 href="#projects"
-                className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition transform hover:scale-105"
+                className="
+                  px-7 py-4
+                  rounded-xl
+                  bg-green-600
+                  hover:bg-green-700
+                  text-white
+                  font-medium
+                  shadow-lg
+                  transition
+                "
               >
                 View Projects
               </a>
 
               <a
                 href="#contact"
-                className="border-2 border-green-500 text-green-400 hover:bg-green-600 hover:text-white px-6 py-3 rounded-lg font-medium transition transform hover:scale-105"
+                className="
+                  px-7 py-4
+                  rounded-xl
+                  border border-green-500
+                  text-green-400
+                  hover:bg-green-600
+                  hover:text-white
+                  transition
+                "
               >
                 Contact Me
               </a>
-            </motion.div>
+            </div>
 
             {/* Social */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="flex justify-center lg:justify-start gap-5"
-            >
+            <div className="flex justify-center lg:justify-start gap-4">
               {socialLinks.map((link) => {
                 const Icon = link.icon;
 
@@ -127,48 +191,73 @@ const Hero = () => {
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={link.label}
-                    className="w-11 h-11 flex items-center justify-center rounded-full border border-gray-500 text-gray-300 hover:text-green-400 hover:border-green-400 transition transform hover:scale-110"
+                    className="
+                      w-12 h-12
+                      rounded-full
+                      bg-white/5
+                      border border-gray-700
+                      flex items-center justify-center
+                      text-gray-300
+                      hover:text-green-400
+                      hover:border-green-400
+                      transition
+                    "
                   >
-                    <Icon size={22} />
+                    <Icon size={20} />
                   </a>
                 );
               })}
-            </motion.div>
+            </div>
           </div>
 
-          {/* Image */}
+          {/* Right */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.85 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.3 }}
-            className="lg:w-1/2"
+            className="flex justify-center"
           >
-            <img
-              src="/images/profile.jpeg"
-              alt="Nahashon Mwendwa"
-              loading="lazy"
-              className="rounded-full w-64 h-64 lg:w-80 lg:h-80 object-cover mx-auto shadow-xl border-4 border-green-500 animate-[float_6s_ease-in-out_infinite]"
-            />
+            <div className="relative">
+
+              <div className="
+                absolute inset-0
+                rounded-full
+                bg-green-500/30
+                blur-3xl
+              " />
+
+              <img
+                src="/images/profile.jpeg"
+                alt="Nahashon Mwendwa"
+                className="
+                  relative
+                  w-72 h-72 lg:w-96 lg:h-96
+                  rounded-full
+                  object-cover
+                  border-4 border-green-500
+                  shadow-2xl
+                "
+              />
+            </div>
           </motion.div>
         </div>
 
-        {/* Scroll Indicator */}
+        {/* Scroll */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2"
+          className="
+            absolute bottom-8 left-1/2
+            -translate-x-1/2
+          "
         >
-          <a
-            href="#about"
-            aria-label="Scroll down"
-            className="animate-bounce hover:scale-110 transition"
-          >
-            <ArrowDownIcon size={36} className="text-green-400" />
+          <a href="#about">
+            <ArrowDown
+              className="text-green-500 animate-bounce"
+              size={36}
+            />
           </a>
         </motion.div>
-
       </div>
     </section>
   );

@@ -1,5 +1,13 @@
 import React from "react";
-import { Github, Linkedin, Mail, Twitter } from "lucide-react";
+import {
+  Github,
+  Linkedin,
+  Mail,
+  Twitter,
+  ArrowUp,
+  MapPin,
+} from "lucide-react";
+import { motion } from "framer-motion";
 
 const quickLinks = [
   { name: "About", href: "#about" },
@@ -10,47 +18,91 @@ const quickLinks = [
 ];
 
 const socialLinks = [
-  { name: "GitHub", href: "https://github.com/nahashon", icon: Github },
-  { name: "LinkedIn", href: "https://linkedin.com/in/nahashon", icon: Linkedin },
-  { name: "Twitter", href: "https://twitter.com/nahashon", icon: Twitter },
-  { name: "Email", href: "mailto:nashonmwendwa04@gmail.com", icon: Mail },
+  {
+    name: "GitHub",
+    href: "https://github.com/nahashon",
+    icon: Github,
+  },
+  {
+    name: "LinkedIn",
+    href: "https://linkedin.com/in/nahashon",
+    icon: Linkedin,
+  },
+  {
+    name: "Twitter",
+    href: "https://twitter.com/nahashon",
+    icon: Twitter,
+  },
+  {
+    name: "Email",
+    href: "mailto:nashonmwendwa04@gmail.com",
+    icon: Mail,
+  },
 ];
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
+  const scrollTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
-    <footer className="bg-gray-50 dark:bg-gray-800 pt-14 pb-8">
+    <footer className="bg-black text-white pt-20 pb-8 border-t border-gray-800">
       <div className="container mx-auto px-6">
 
-        <div className="grid md:grid-cols-3 gap-10 mb-10">
+        <div className="grid lg:grid-cols-3 gap-12 mb-14">
 
           {/* Brand */}
           <div>
-            <h3 className="text-2xl font-bold text-green-600 mb-4">
+            <h3 className="text-3xl font-bold text-green-500 mb-4">
               Nahashon Mwendwa
             </h3>
 
-            <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-              Full-stack developer focused on building scalable web applications
-              and creating meaningful digital experiences.
+            <p className="text-gray-400 leading-relaxed mb-6">
+              Full-stack developer passionate about building scalable web
+              applications and meaningful digital experiences.
             </p>
 
-            <div className="flex space-x-3">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-900/30 text-green-400 text-sm mb-6">
+              <MapPin size={16} className="mr-2" />
+              Available for opportunities
+            </div>
+
+            <div className="flex gap-3">
               {socialLinks.map((link) => {
                 const Icon = link.icon;
 
                 return (
-                  <a
+                  <motion.a
                     key={link.name}
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`${link.name} profile`}
-                    className="p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+                    whileHover={{
+                      y: -4,
+                    }}
+                    whileTap={{
+                      scale: 0.95,
+                    }}
+                    aria-label={link.name}
+                    className="
+                      w-11 h-11
+                      rounded-xl
+                      bg-gray-900
+                      border border-gray-800
+                      flex items-center justify-center
+                      text-gray-400
+                      hover:text-green-400
+                      hover:border-green-500
+                      transition-all
+                    "
                   >
                     <Icon size={20} />
-                  </a>
+                  </motion.a>
                 );
               })}
             </div>
@@ -58,16 +110,20 @@ const Footer = () => {
 
           {/* Navigation */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
-              Quick Links
-            </h3>
+            <h4 className="text-lg font-semibold mb-5">
+              Navigation
+            </h4>
 
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.name}>
                   <a
                     href={link.href}
-                    className="text-gray-600 hover:text-green-600 dark:text-gray-400 dark:hover:text-green-400 transition"
+                    className="
+                      text-gray-400
+                      hover:text-green-400
+                      transition-colors
+                    "
                   >
                     {link.name}
                   </a>
@@ -78,41 +134,78 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+            <h4 className="text-lg font-semibold mb-5">
               Contact
-            </h3>
+            </h4>
 
-            <address className="not-italic space-y-3 text-gray-600 dark:text-gray-300">
+            <div className="space-y-4 text-gray-400">
               <p>Nairobi, Kenya</p>
 
-              <p>
-                <a
-                  href="tel:+254748495724"
-                  className="hover:text-green-600 dark:hover:text-green-400 transition"
-                >
-                  +254 748 495 724
-                </a>
-              </p>
+              <a
+                href="tel:+254748495724"
+                className="block hover:text-green-400 transition"
+              >
+                +254 748 495 724
+              </a>
 
-              <p className="break-all">
-                <a
-                  href="mailto:nashonmwendwa04@gmail.com"
-                  className="hover:text-green-600 dark:hover:text-green-400 transition"
-                >
-                  nashonmwendwa04@gmail.com
-                </a>
+              <a
+                href="mailto:nashonmwendwa04@gmail.com"
+                className="block break-all hover:text-green-400 transition"
+              >
+                nashonmwendwa04@gmail.com
+              </a>
+
+              <p className="text-sm text-gray-500 pt-3">
+                Usually responds within 24 hours.
               </p>
-            </address>
+            </div>
           </div>
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-gray-200 dark:border-gray-700 pt-6 text-center">
+        {/* Technologies */}
+        <div className="flex flex-wrap justify-center gap-3 mb-8">
+          {["React", "Tailwind CSS", "Framer Motion", "Vite"].map(
+            (tech) => (
+              <span
+                key={tech}
+                className="
+                  px-4 py-2
+                  rounded-full
+                  bg-gray-900
+                  border border-gray-800
+                  text-sm text-gray-300
+                "
+              >
+                {tech}
+              </span>
+            )
+          )}
+        </div>
 
-          <p className="text-gray-600 dark:text-gray-400 text-sm">
-            © {currentYear} Nahashon Mwendwa. Built with React.
+        {/* Divider */}
+        <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-gray-500 text-sm text-center md:text-left">
+            © {currentYear} Nahashon Mwendwa. All rights reserved.
           </p>
 
+          <p className="text-gray-500 text-sm">
+            Built with React & Tailwind CSS
+          </p>
+
+          <button
+            onClick={scrollTop}
+            aria-label="Scroll to top"
+            className="
+              w-10 h-10
+              rounded-full
+              bg-green-600
+              hover:bg-green-700
+              flex items-center justify-center
+              transition
+            "
+          >
+            <ArrowUp size={18} />
+          </button>
         </div>
 
       </div>

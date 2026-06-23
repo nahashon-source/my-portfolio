@@ -1,86 +1,164 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { FiExternalLink, FiGithub } from "react-icons/fi";
+import {
+  FiExternalLink,
+  FiGithub,
+} from "react-icons/fi";
 
-// Map of tag names to colors for badges
 const tagColors = {
-  React: "bg-blue-200 text-blue-800 dark:bg-blue-800 dark:text-blue-200",
-  "Next.js": "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200",
-  "Node.js": "bg-green-200 text-green-800 dark:bg-green-800 dark:text-green-200",
-  Express: "bg-gray-300 text-gray-900 dark:bg-gray-600 dark:text-gray-100",
-  MongoDB: "bg-green-300 text-green-900 dark:bg-green-700 dark:text-green-100",
-  "PostgreSQL": "bg-indigo-200 text-indigo-900 dark:bg-indigo-700 dark:text-indigo-200",
-  Flask: "bg-white text-black dark:bg-gray-700 dark:text-white",
-  Stripe: "bg-purple-200 text-purple-900 dark:bg-purple-700 dark:text-purple-200",
-  Axios: "bg-yellow-200 text-yellow-900 dark:bg-yellow-700 dark:text-yellow-200",
-  "Material-UI": "bg-teal-200 text-teal-900 dark:bg-teal-700 dark:text-teal-200",
-  Javascript: "bg-yellow-300 text-yellow-900 dark:bg-yellow-700 dark:text-yellow-200",
+  React: "bg-cyan-500/20 text-cyan-300",
+  Laravel: "bg-red-500/20 text-red-300",
+  PHP: "bg-indigo-500/20 text-indigo-300",
+  Python: "bg-yellow-500/20 text-yellow-300",
+  FastAPI: "bg-teal-500/20 text-teal-300",
+  MySQL: "bg-orange-500/20 text-orange-300",
+  PostgreSQL: "bg-blue-500/20 text-blue-300",
+  Tailwind: "bg-cyan-500/20 text-cyan-300",
+  TypeScript: "bg-blue-500/20 text-blue-300",
 };
 
 const ProjectCard = ({ project }) => {
   if (!project) return null;
 
-  const { title, description, image, tags = [], liveUrl, githubUrl } = project;
+  const {
+    title,
+    description,
+    image,
+    tags = [],
+    liveUrl,
+    githubUrl,
+    featured,
+    status,
+    type,
+  } = project;
 
   return (
     <motion.div
-      whileHover={{ scale: 1.03 }}
-      transition={{ type: "spring", stiffness: 200, damping: 15 }}
-      className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden flex flex-col"
+      whileHover={{
+        y: -8,
+      }}
+      className="
+        overflow-hidden
+        rounded-2xl
+        bg-gray-900
+        border border-gray-800
+        shadow-lg
+        hover:border-green-500/50
+        transition-all
+      "
     >
       {/* Image */}
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative h-56 overflow-hidden">
+
         <img
           src={image}
           alt={title}
-          className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-          onError={(e) => (e.target.src = "/placeholder.png")}
+          className="
+            w-full h-full object-cover
+            transition duration-500
+            hover:scale-110
+          "
         />
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+
+        {featured && (
+          <span className="
+            absolute top-4 left-4
+            px-3 py-1 rounded-full
+            bg-green-600 text-white text-xs
+          ">
+            Featured
+          </span>
+        )}
+
+        {status && (
+          <span className="
+            absolute top-4 right-4
+            px-3 py-1 rounded-full
+            bg-emerald-600 text-white text-xs
+          ">
+            {status}
+          </span>
+        )}
       </div>
 
-      {/* Content */}
-      <div className="p-5 flex flex-col flex-grow">
-        <h3 className="text-xl font-semibold text-gray-800 dark:text-white">
+      <div className="p-6">
+
+        {type && (
+          <p className="text-green-400 text-sm mb-2">
+            {type}
+          </p>
+        )}
+
+        <h3 className="text-2xl font-semibold text-white mb-3">
           {title}
         </h3>
-        <p className="text-gray-600 dark:text-gray-300 mt-2 flex-grow">
+
+        <p className="text-gray-400 leading-relaxed mb-5">
           {description}
         </p>
 
-        {/* Tags */}
-        <div className="flex flex-wrap gap-2 mt-4">
+        <div className="flex flex-wrap gap-2 mb-6">
           {tags.map((tag, idx) => (
             <span
               key={idx}
-              className={`px-3 py-1.5 rounded-full text-sm ${
-                tagColors[tag] || "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200"
-              }`}
+              className={`
+                px-3 py-1 rounded-full text-sm
+                ${tagColors[tag] ||
+                  "bg-gray-700 text-gray-300"}
+              `}
             >
               {tag}
             </span>
           ))}
         </div>
 
-        {/* Links */}
-        <div className="flex gap-4 mt-5">
+        <div className="flex gap-3">
           {liveUrl && (
             <a
               href={liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+              className="
+                flex-1
+                py-3
+                rounded-lg
+                bg-green-600
+                hover:bg-green-700
+                text-white
+                flex items-center
+                justify-center
+                gap-2
+                transition
+              "
             >
-              <FiExternalLink /> Live
+              <FiExternalLink />
+              Live Demo
             </a>
           )}
+
           {githubUrl && (
             <a
               href={githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 text-gray-800 hover:text-gray-900 dark:text-gray-200 dark:hover:text-white"
+              className="
+                flex-1
+                py-3
+                rounded-lg
+                border border-gray-700
+                text-gray-300
+                hover:border-green-500
+                hover:text-white
+                flex items-center
+                justify-center
+                gap-2
+                transition
+              "
             >
-              <FiGithub /> Code
+              <FiGithub />
+              Code
             </a>
           )}
         </div>

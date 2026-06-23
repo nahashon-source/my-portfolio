@@ -1,23 +1,34 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Code, BookOpen, Heart } from "lucide-react";
+import {
+  Code2,
+  BookOpen,
+  HeartHandshake,
+  Briefcase,
+} from "lucide-react";
 
 const highlights = [
   {
-    icon: Code,
+    icon: Code2,
     title: "Development",
-    desc: "Building scalable full-stack applications with modern tools and clean architecture.",
+    desc: "Building scalable full-stack applications with modern technologies and clean architecture.",
   },
   {
     icon: BookOpen,
     title: "Continuous Learning",
-    desc: "Always exploring new technologies, frameworks, and industry best practices.",
+    desc: "Exploring new frameworks, tools, and best practices to stay ahead in technology.",
   },
   {
-    icon: Heart,
+    icon: HeartHandshake,
     title: "User-Focused",
-    desc: "Creating digital experiences that are intuitive, accessible, and impactful.",
+    desc: "Designing intuitive and accessible experiences that solve real-world problems.",
   },
+];
+
+const stats = [
+  { number: "10+", label: "Projects" },
+  { number: "5+", label: "Technologies" },
+  { number: "100%", label: "Dedication" },
 ];
 
 const About = () => {
@@ -28,58 +39,89 @@ const About = () => {
     >
       <div className="container mx-auto px-6">
 
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="max-w-3xl mx-auto text-center"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            About Me
-          </h2>
+        {/* Main Content */}
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
 
-          <p className="text-green-600 font-medium mb-6">
-            Full-Stack Developer • React • Backend Systems • APIs
-          </p>
+          {/* Left Side */}
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7 }}
+            viewport={{ once: true }}
+          >
+            <p className="text-green-600 font-semibold mb-3">
+              ABOUT ME
+            </p>
 
-          <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
-            I’m a full-stack developer passionate about building fast,
-            scalable web applications and transforming complex ideas into
-            clean, user-friendly products. I enjoy designing robust backend
-            systems, crafting intuitive front-end interfaces, and writing
-            maintainable code that stands the test of time.
-          </p>
-        </motion.div>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 leading-tight">
+              Full-Stack Developer Passionate About Building Modern Web
+              Experiences
+            </h2>
 
-        {/* Cards */}
-        <div className="mt-16 grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
-          {highlights.map((item, idx) => {
-            const Icon = item.icon;
+            <p className="text-gray-600 dark:text-gray-300 text-lg leading-relaxed mb-6">
+              I'm a full-stack developer specializing in modern web
+              technologies including React, JavaScript, and backend systems.
+              I enjoy transforming ideas into scalable, efficient, and
+              user-friendly digital solutions.
+            </p>
 
-            return (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.15 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -6 }}
-                className="p-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-green-50/60 dark:bg-gray-800 shadow-sm hover:shadow-xl transition-all"
-              >
-                <Icon className="w-10 h-10 text-green-600 mb-4" />
+            <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-8">
+              Whether it's building responsive interfaces, designing APIs,
+              or optimizing application performance, I focus on creating
+              products that deliver real value.
+            </p>
 
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                  {item.title}
-                </h3>
+            {/* Stats */}
+            <div className="grid grid-cols-3 gap-6">
+              {stats.map((stat, index) => (
+                <div key={index}>
+                  <h3 className="text-3xl font-bold text-green-600">
+                    {stat.number}
+                  </h3>
+                  <p className="text-gray-500 dark:text-gray-400">
+                    {stat.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
 
-                <p className="text-gray-600 dark:text-gray-400">
-                  {item.desc}
-                </p>
-              </motion.div>
-            );
-          })}
+          {/* Right Side */}
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7 }}
+            viewport={{ once: true }}
+            className="grid gap-6"
+          >
+            {highlights.map((item, idx) => {
+              const Icon = item.icon;
+
+              return (
+                <motion.div
+                  key={idx}
+                  whileHover={{
+                    y: -8,
+                    scale: 1.02,
+                  }}
+                  className="p-7 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-md hover:shadow-2xl transition-all duration-300"
+                >
+                  <div className="w-14 h-14 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center mb-4">
+                    <Icon className="w-7 h-7 text-green-600" />
+                  </div>
+
+                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+                    {item.title}
+                  </h3>
+
+                  <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                    {item.desc}
+                  </p>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+
         </div>
       </div>
     </section>

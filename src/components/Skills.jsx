@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import skillCategories from "../data/skills";
 
-// Map icon names to actual components
 const iconMap = {
   Palette,
   Terminal,
@@ -21,7 +20,6 @@ const iconMap = {
   Globe,
 };
 
-// Motion variants for parent container and cards
 const containerVariants = {
   hidden: {},
   show: {
@@ -32,48 +30,56 @@ const containerVariants = {
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 25 },
-  show: { opacity: 1, y: 0 },
+  hidden: { opacity: 0, y: 30 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+    },
+  },
 };
 
 const Skills = () => {
   return (
     <section
       id="skills"
-      className="py-20 bg-white dark:bg-gray-900"
+      className="py-24 bg-gray-50 dark:bg-gray-900"
       aria-labelledby="skills-heading"
     >
-      <div className="container mx-auto px-4">
-
-        {/* Section Header */}
+      <div className="container mx-auto px-6">
+        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-14"
+          className="text-center mb-16"
         >
+          <p className="text-green-600 font-semibold uppercase tracking-wider mb-2">
+            Technical Skills
+          </p>
+
           <h2
             id="skills-heading"
-            className="text-3xl font-bold text-gray-900 dark:text-white mb-4"
+            className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-5"
           >
             Skills & Expertise
           </h2>
 
-          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            A comprehensive overview of my technical skills and tools used in
-            building scalable full-stack applications.
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            Technologies, frameworks, and tools I use to design, build, and
+            deploy modern web applications.
           </p>
         </motion.div>
 
-        {/* Skill Cards */}
+        {/* Skills Grid */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7"
-          role="list"
+          className="grid md:grid-cols-2 xl:grid-cols-3 gap-8"
         >
           {skillCategories.map((category) => {
             const Icon = iconMap[category.icon];
@@ -82,51 +88,97 @@ const Skills = () => {
               <motion.div
                 key={category.title}
                 variants={cardVariants}
-                className="group bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-                role="listitem"
+                whileHover={{
+                  y: -8,
+                  scale: 1.02,
+                }}
+                className="
+                  group relative overflow-hidden
+                  rounded-2xl
+                  border border-gray-200 dark:border-gray-700
+                  bg-white dark:bg-gray-800
+                  p-7
+                  shadow-md
+                  hover:shadow-2xl
+                  transition-all duration-300
+                "
               >
-                {/* Header */}
-                <div className="flex items-center mb-5">
-                  <span
-                    className={`p-3 rounded-lg mr-3 ${
-                      category.color || "bg-green-100 dark:bg-green-900"
-                    }`}
-                  >
-                    <Icon
-                      size={24}
-                      className="text-green-600 dark:text-green-400"
-                    />
-                  </span>
+                {/* Background Glow */}
+                <div className="absolute top-0 right-0 h-24 w-24 rounded-full bg-green-100 dark:bg-green-900/20 blur-3xl opacity-50" />
 
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                    {category.title}
-                  </h3>
+                {/* Header */}
+                <div className="relative flex items-center mb-6">
+                  <div className="w-14 h-14 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center mr-4">
+                    <Icon className="w-7 h-7 text-green-600 dark:text-green-400" />
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                      {category.title}
+                    </h3>
+
+                    {category.description && (
+                      <p className="text-sm text-gray-500 dark:text-gray-400">
+                        {category.description}
+                      </p>
+                    )}
+                  </div>
                 </div>
 
                 {/* Skills */}
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {category.skills.map((skill) => (
                     <div key={skill.name}>
-                      {/* Skill Label */}
-                      <div className="flex justify-between text-sm mb-1">
+                      <div className="flex justify-between mb-2 text-sm">
                         <span className="text-gray-700 dark:text-gray-300">
                           {skill.name}
                         </span>
-                        <span className="text-gray-500 dark:text-gray-400">
-                          {skill.level}%
+
+                        <span className="text-gray-500 dark:text-gray-400 font-medium">
+                          Advanced
                         </span>
                       </div>
 
-                      {/* Progress Bar */}
-                      <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
+                      <div className="w-full h-2 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
                         <motion.div
                           initial={{ width: 0 }}
-                          whileInView={{ width: `${skill.level}%` }}
-                          transition={{ duration: 0.8 }}
-                          className="h-full bg-green-500 rounded-full"
+                          whileInView={{
+                            width: `${skill.level}%`,
+                          }}
+                          viewport={{ once: true }}
+                          transition={{
+                            duration: 1,
+                            ease: "easeOut",
+                          }}
+                          className="
+                            h-full rounded-full
+                            bg-gradient-to-r
+                            from-green-500
+                            to-emerald-400
+                          "
                         />
                       </div>
                     </div>
+                  ))}
+                </div>
+
+                {/* Skill Tags */}
+                <div className="flex flex-wrap gap-2 mt-6">
+                  {category.skills.map((skill) => (
+                    <span
+                      key={skill.name}
+                      className="
+                        px-3 py-1
+                        text-xs font-medium
+                        rounded-full
+                        bg-green-100
+                        text-green-700
+                        dark:bg-green-900/30
+                        dark:text-green-300
+                      "
+                    >
+                      {skill.name}
+                    </span>
                   ))}
                 </div>
               </motion.div>

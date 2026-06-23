@@ -1,34 +1,59 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Send, Mail, MapPin, Phone } from "lucide-react";
+import {
+  Send,
+  Mail,
+  MapPin,
+  Phone,
+  Clock,
+} from "lucide-react";
 import { Toaster, toast } from "react-hot-toast";
-import { sendEmail } from "../services/emailService";
+import { sendEmail } from "../utils/sendEmail";
 
 const contactInfo = [
-  { icon: Mail, title: "Email", value: "nashonmwendwa0@gmail.com" },
-  { icon: MapPin, title: "Location", value: "Nairobi, Kenya" },
-  { icon: Phone, title: "Phone", value: "+254 748 495 724" },
+  {
+    icon: Mail,
+    title: "Email",
+    value: "nashonmwendwa0@gmail.com",
+  },
+  {
+    icon: MapPin,
+    title: "Location",
+    value: "Nairobi, Kenya",
+  },
+  {
+    icon: Phone,
+    title: "Phone",
+    value: "+254 748 495 724",
+  },
+  {
+    icon: Clock,
+    title: "Availability",
+    value: "Open to opportunities",
+  },
 ];
 
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    subject: "",
     message: "",
-    company: "", // honeypot
+    company: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.company) {
-      return; // bot detected
-    }
+    if (formData.company) return;
 
     if (formData.message.length > 1000) {
       toast.error("Message must be under 1000 characters.");
@@ -45,6 +70,7 @@ const Contact = () => {
       setFormData({
         name: "",
         email: "",
+        subject: "",
         message: "",
         company: "",
       });
@@ -58,11 +84,11 @@ const Contact = () => {
   return (
     <section
       id="contact"
-      className="py-24 bg-white dark:bg-gray-900"
+      className="py-24 bg-gray-50 dark:bg-gray-900"
     >
       <Toaster position="top-right" />
 
-      <div className="container mx-auto px-6 md:px-8">
+      <div className="container mx-auto px-6">
 
         {/* Header */}
         <motion.div
@@ -72,19 +98,24 @@ const Contact = () => {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white">
-            Get in Touch
+          <p className="text-green-600 font-semibold uppercase tracking-widest mb-2">
+            Contact
+          </p>
+
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            Let's Work Together
           </h2>
 
-          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Interested in collaborating or discussing a project? I'd love to hear from you.
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+            Have a project, opportunity, or idea you'd like to discuss?
+            Feel free to reach out and I'll get back to you as soon as possible.
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-16 max-w-6xl mx-auto">
+        <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
 
-          {/* Contact Info */}
-          <div className="space-y-8">
+          {/* Contact Information */}
+          <div className="space-y-6">
             {contactInfo.map((item, idx) => {
               const Icon = item.icon;
 
@@ -93,16 +124,27 @@ const Contact = () => {
                   key={idx}
                   initial={{ opacity: 0, x: -30 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.15 }}
+                  transition={{ delay: idx * 0.1 }}
                   viewport={{ once: true }}
-                  className="flex items-start space-x-4"
+                  whileHover={{ y: -4 }}
+                  className="
+                    flex items-start gap-4
+                    p-5 rounded-2xl
+                    bg-white dark:bg-gray-800
+                    shadow-md hover:shadow-xl
+                    transition-all
+                  "
                 >
-                  <div className="p-3 rounded-lg bg-green-100 dark:bg-gray-800">
-                    <Icon className="text-green-600 dark:text-green-400" size={24} />
+                  <div className="
+                    w-12 h-12 rounded-xl
+                    bg-green-100 dark:bg-green-900/30
+                    flex items-center justify-center
+                  ">
+                    <Icon className="text-green-600" size={22} />
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                    <h3 className="font-semibold text-gray-900 dark:text-white">
                       {item.title}
                     </h3>
 
@@ -122,8 +164,13 @@ const Contact = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="space-y-6"
             aria-busy={isSubmitting}
+            className="
+              p-8 rounded-2xl
+              bg-white dark:bg-gray-800
+              shadow-lg
+              space-y-6
+            "
           >
             {/* Honeypot */}
             <input
@@ -134,23 +181,31 @@ const Contact = () => {
             />
 
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block mb-2 font-medium">
                 Name
               </label>
 
               <input
+                type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                autoComplete="name"
                 required
                 maxLength={50}
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-green-500 outline-none"
+                autoComplete="name"
+                className="
+                  w-full px-4 py-3 rounded-xl
+                  border border-gray-200
+                  dark:border-gray-700
+                  bg-gray-50 dark:bg-gray-900
+                  focus:ring-2 focus:ring-green-500
+                  outline-none
+                "
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block mb-2 font-medium">
                 Email
               </label>
 
@@ -158,29 +213,65 @@ const Contact = () => {
                 type="email"
                 name="email"
                 value={formData.email}
-                autoComplete="email"
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-green-500 outline-none"
+                autoComplete="email"
+                className="
+                  w-full px-4 py-3 rounded-xl
+                  border border-gray-200
+                  dark:border-gray-700
+                  bg-gray-50 dark:bg-gray-900
+                  focus:ring-2 focus:ring-green-500
+                  outline-none
+                "
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <label className="block mb-2 font-medium">
+                Subject
+              </label>
+
+              <input
+                type="text"
+                name="subject"
+                value={formData.subject}
+                onChange={handleChange}
+                maxLength={100}
+                className="
+                  w-full px-4 py-3 rounded-xl
+                  border border-gray-200
+                  dark:border-gray-700
+                  bg-gray-50 dark:bg-gray-900
+                  focus:ring-2 focus:ring-green-500
+                  outline-none
+                "
+              />
+            </div>
+
+            <div>
+              <label className="block mb-2 font-medium">
                 Message
               </label>
 
               <textarea
+                rows={6}
                 name="message"
-                rows={5}
-                maxLength={1000}
                 value={formData.message}
                 onChange={handleChange}
+                maxLength={1000}
                 required
-                className="w-full px-4 py-3 rounded-lg bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-green-500 outline-none"
+                className="
+                  w-full px-4 py-3 rounded-xl
+                  border border-gray-200
+                  dark:border-gray-700
+                  bg-gray-50 dark:bg-gray-900
+                  focus:ring-2 focus:ring-green-500
+                  outline-none
+                "
               />
 
-              <div className="text-xs text-gray-500 mt-1 text-right">
+              <div className="text-right text-xs text-gray-500 mt-2">
                 {formData.message.length}/1000
               </div>
             </div>
@@ -188,13 +279,23 @@ const Contact = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full px-6 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg flex items-center justify-center disabled:opacity-50"
+              className="
+                w-full py-4
+                rounded-xl
+                bg-green-600
+                hover:bg-green-700
+                text-white
+                font-medium
+                flex items-center justify-center gap-2
+                disabled:opacity-50
+                transition
+              "
             >
               {isSubmitting ? (
                 "Sending..."
               ) : (
                 <>
-                  <Send size={18} className="mr-2" />
+                  <Send size={18} />
                   Send Message
                 </>
               )}
