@@ -1,129 +1,83 @@
 import React from "react";
-import {
-  Github,
-  Linkedin,
-  Mail,
-  Twitter,
-  ArrowUp,
-  MapPin,
-} from "lucide-react";
+import { Github, Linkedin, Mail, Twitter, ArrowUp, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
 
-const quickLinks = [
-  { name: "About", href: "#about" },
+const QUICK_LINKS = [
+  { name: "About",    href: "#about" },
   { name: "Projects", href: "#projects" },
-  { name: "Skills", href: "#skills" },
-  { name: "Resume", href: "#resume" },
-  { name: "Contact", href: "#contact" },
+  { name: "Skills",   href: "#skills" },
+  { name: "Resume",   href: "#resume" },
+  { name: "Contact",  href: "#contact" },
 ];
 
-const socialLinks = [
-  {
-    name: "GitHub",
-    href: "https://github.com/nahashon",
-    icon: Github,
-  },
-  {
-    name: "LinkedIn",
-    href: "https://linkedin.com/in/nahashon",
-    icon: Linkedin,
-  },
-  {
-    name: "Twitter",
-    href: "https://twitter.com/nahashon",
-    icon: Twitter,
-  },
-  {
-    name: "Email",
-    href: "mailto:nashonmwendwa04@gmail.com",
-    icon: Mail,
-  },
+const SOCIAL_LINKS = [
+  { name: "GitHub",   href: "https://github.com/nahashon-source",          icon: Github },
+  { name: "LinkedIn", href: "https://linkedin.com/in/Nahashon-Mwendwa",    icon: Linkedin },
+  { name: "Twitter",  href: "https://twitter.com/nahashon",                icon: Twitter },
+  { name: "Email",    href: "mailto:nashonmwendwa0@gmail.com",              icon: Mail },
 ];
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
-  const scrollTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  };
-
   return (
-    <footer className="bg-black text-white pt-20 pb-8 border-t border-gray-800">
+    <footer className="bg-[#040710] border-t border-white/[0.05] pt-16 pb-8">
       <div className="container mx-auto px-6">
 
-        <div className="grid lg:grid-cols-3 gap-12 mb-14">
+        <div className="grid lg:grid-cols-3 gap-12 mb-12">
 
           {/* Brand */}
           <div>
-            <h3 className="text-3xl font-bold text-green-500 mb-4">
-              Nahashon Mwendwa
-            </h3>
+            <a href="#" className="text-xl font-bold tracking-tight">
+              <span className="text-white/40">Na</span>
+              <span className="text-green-500">hashon</span>
+            </a>
 
-            <p className="text-gray-400 leading-relaxed mb-6">
+            <p className="text-sm text-white/35 leading-relaxed mt-4 mb-5 max-w-xs">
               Full-stack developer passionate about building scalable web
               applications and meaningful digital experiences.
             </p>
 
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-900/30 text-green-400 text-sm mb-6">
-              <MapPin size={16} className="mr-2" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-500/8 border border-green-500/15 text-green-400 text-xs mb-6">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              <MapPin size={11} />
               Available for opportunities
             </div>
 
-            <div className="flex gap-3">
-              {socialLinks.map((link) => {
-                const Icon = link.icon;
-
-                return (
-                  <motion.a
-                    key={link.name}
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{
-                      y: -4,
-                    }}
-                    whileTap={{
-                      scale: 0.95,
-                    }}
-                    aria-label={link.name}
-                    className="
-                      w-11 h-11
-                      rounded-xl
-                      bg-gray-900
-                      border border-gray-800
-                      flex items-center justify-center
-                      text-gray-400
-                      hover:text-green-400
-                      hover:border-green-500
-                      transition-all
-                    "
-                  >
-                    <Icon size={20} />
-                  </motion.a>
-                );
-              })}
+            <div className="flex gap-2">
+              {SOCIAL_LINKS.map(({ name, href, icon: Icon }) => (
+                <motion.a
+                  key={name}
+                  href={href}
+                  target={name !== "Email" ? "_blank" : undefined}
+                  rel="noopener noreferrer"
+                  whileHover={{ y: -3 }}
+                  whileTap={{ scale: 0.95 }}
+                  aria-label={name}
+                  className="
+                    w-8 h-8 rounded-lg flex items-center justify-center
+                    bg-white/[0.03] border border-white/[0.07] text-white/35
+                    hover:text-green-400 hover:border-green-500/25 hover:bg-green-500/[0.06]
+                    transition-all
+                  "
+                >
+                  <Icon size={15} />
+                </motion.a>
+              ))}
             </div>
           </div>
 
           {/* Navigation */}
           <div>
-            <h4 className="text-lg font-semibold mb-5">
+            <h4 className="text-xs font-medium text-white/25 uppercase tracking-widest mb-5">
               Navigation
             </h4>
-
-            <ul className="space-y-3">
-              {quickLinks.map((link) => (
+            <ul className="space-y-2.5">
+              {QUICK_LINKS.map((link) => (
                 <li key={link.name}>
                   <a
                     href={link.href}
-                    className="
-                      text-gray-400
-                      hover:text-green-400
-                      transition-colors
-                    "
+                    className="text-sm text-white/40 hover:text-green-400 transition-colors"
                   >
                     {link.name}
                   </a>
@@ -134,80 +88,58 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h4 className="text-lg font-semibold mb-5">
+            <h4 className="text-xs font-medium text-white/25 uppercase tracking-widest mb-5">
               Contact
             </h4>
-
-            <div className="space-y-4 text-gray-400">
+            <div className="space-y-2.5 text-sm text-white/40">
               <p>Nairobi, Kenya</p>
-
-              <a
-                href="tel:+254748495724"
-                className="block hover:text-green-400 transition"
-              >
+              <a href="tel:+254748495724" className="block hover:text-green-400 transition-colors">
                 +254 748 495 724
               </a>
-
-              <a
-                href="mailto:nashonmwendwa04@gmail.com"
-                className="block break-all hover:text-green-400 transition"
-              >
-                nashonmwendwa04@gmail.com
+              <a href="mailto:nashonmwendwa0@gmail.com" className="block break-all hover:text-green-400 transition-colors">
+                nashonmwendwa0@gmail.com
               </a>
-
-              <p className="text-sm text-gray-500 pt-3">
+              <p className="text-white/20 text-xs pt-2">
                 Usually responds within 24 hours.
               </p>
             </div>
           </div>
         </div>
 
-        {/* Technologies */}
-        <div className="flex flex-wrap justify-center gap-3 mb-8">
-          {["React", "Tailwind CSS", "Framer Motion", "Vite"].map(
-            (tech) => (
-              <span
-                key={tech}
-                className="
-                  px-4 py-2
-                  rounded-full
-                  bg-gray-900
-                  border border-gray-800
-                  text-sm text-gray-300
-                "
-              >
-                {tech}
-              </span>
-            )
-          )}
+        {/* Built-with tags */}
+        <div className="flex flex-wrap gap-2 mb-8">
+          {["React", "Tailwind CSS", "Framer Motion", "Vite"].map((tech) => (
+            <span
+              key={tech}
+              className="px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.06] text-xs text-white/30"
+            >
+              {tech}
+            </span>
+          ))}
         </div>
 
-        {/* Divider */}
-        <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-gray-500 text-sm text-center md:text-left">
+        {/* Bottom bar */}
+        <div className="border-t border-white/[0.05] pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-white/20 text-center md:text-left">
             © {currentYear} Nahashon Mwendwa. All rights reserved.
           </p>
 
-          <p className="text-gray-500 text-sm">
+          <p className="text-xs text-white/20">
             Built with React & Tailwind CSS
           </p>
 
           <button
-            onClick={scrollTop}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             aria-label="Scroll to top"
             className="
-              w-10 h-10
-              rounded-full
-              bg-green-600
-              hover:bg-green-700
-              flex items-center justify-center
-              transition
+              w-8 h-8 rounded-lg flex items-center justify-center
+              bg-green-700 hover:bg-green-600
+              text-white transition-colors
             "
           >
-            <ArrowUp size={18} />
+            <ArrowUp size={15} />
           </button>
         </div>
-
       </div>
     </footer>
   );
