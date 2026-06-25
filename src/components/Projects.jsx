@@ -1,46 +1,59 @@
-import React, { useState, useRef, useEffect } from "react";
-import {
-  motion,
-  AnimatePresence,
-  useScroll,
-  useTransform,
-  useMotionValue,
-  useSpring,
-} from "framer-motion";
+import React, { useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   Github,
-  ExternalLink,
   ArrowUpRight,
   Lock,
   ChevronDown,
   ChevronUp,
   Zap,
   Globe,
-  Briefcase,
-  FlaskConical,
   User,
   Building2,
   Shield,
+  Terminal,
 } from "lucide-react";
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
+//
+// Data model notes:
+// - `screenshot` replaces the old `image` field. No stock photography —
+//   if it's null/missing, the UI renders a designed code-pattern panel,
+//   never a placeholder photo.
+// - `role`, `duration`, `client`, `myContributions` exist so the section
+//   reads as a case study (what did you actually do) rather than a
+//   gallery (here's a picture of a website).
+// - `outcome` is a single plain-language result sentence, distinct from
+//   `metrics` (which stays numeric/scannable).
+// - NDA/private rendering currently falls back to the same code-pattern
+//   panel used for "no screenshot yet" — a dedicated redacted-document
+//   treatment is intentionally deferred (see PrivateState stub below).
 
 const projects = [
   {
     id: "mazingira",
     title: "Mazingira",
-    tagline: "Environmental preservation, reimagined",
     type: "Full Stack",
     status: "live",
     featured: true,
     year: "2024",
     color: "#34d399",
-    description:
-      "A community-driven environmental preservation platform featuring real-time monitoring, data visualization, and engagement tools that support sustainable conservation initiatives.",
+    role: "Solo developer",
+    duration: "3 months",
+    client: "Independent / community conservation groups",
+    context:
+      "A platform for local conservation groups to coordinate environmental initiatives and track impact across counties.",
     problem:
-      "Local conservation groups lacked accessible tools to coordinate efforts and visualize environmental data in real time.",
+      "Conservation groups lacked a shared tool to coordinate efforts or see environmental data in real time — work was scattered across spreadsheets and WhatsApp groups.",
     solution:
-      "Built a collaborative platform with live monitoring dashboards, community reporting, and geo-tagged initiative tracking.",
+      "Built a collaborative platform with live monitoring dashboards, community-submitted reports, and geo-tagged initiative tracking.",
+    myContributions: [
+      "Designed and built the full REST API in Flask, including report submission and geo-tagging endpoints",
+      "Built the data visualization layer in Recharts for county-level impact tracking",
+      "Set up PostgreSQL schema and query optimization for time-series environmental data",
+    ],
+    outcome:
+      "Adopted by community groups across 12 counties, with 3,000+ active users coordinating initiatives through the platform.",
     tech: {
       Frontend: ["React", "TypeScript", "Recharts"],
       Backend: ["Flask", "PostgreSQL", "REST API"],
@@ -49,27 +62,36 @@ const projects = [
       { value: "3K+", label: "Active users" },
       { value: "12", label: "Counties covered" },
     ],
-    image:
-      "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=900&h=600&fit=crop",
+    screenshot: null,
+    screenshotAlt:
+      "Mazingira dashboard showing county-level environmental data",
     live: "https://react-mazingira.vercel.app/",
     github: "https://github.com/nahashon-source/frontend-mazingira.git",
-    size: "large",
   },
   {
     id: "fit-logistics",
     title: "Freight In Time Website",
-    tagline: "East Africa's logistics, digitized",
     type: "Enterprise",
     status: "live",
     featured: true,
     year: "2024",
     color: "#6366f1",
-    description:
-      "A full-stack logistics platform serving East African operations with service pages, office locations, customs solutions, quote requests, and AI-powered customer assistance.",
+    role: "Solo developer",
+    duration: "4 months",
+    client: "Freight In Time (regional logistics company)",
+    context:
+      "Public-facing site and quoting system for a logistics company operating across 10 East African countries.",
     problem:
       "Manual freight quoting was slow and error-prone, losing leads and frustrating customers across 10 operating countries.",
     solution:
-      "Built a quote engine backed by FastAPI + FiT Express API, with reCAPTCHA protection, cold-start handling, and a conversational AI assistant.",
+      "Built a quote engine backed by FastAPI and the FiT Express API, with reCAPTCHA abuse protection, cold-start handling for the hosting tier, and a conversational AI assistant for common customer questions.",
+    myContributions: [
+      "Built the FastAPI quote engine and integrated it with the FiT Express API",
+      "Handled cold-start latency on the free hosting tier with a warm-up strategy to keep quote response under 2 seconds",
+      "Implemented reCAPTCHA and rate-limiting to stop quote-form abuse",
+    ],
+    outcome:
+      "Quote requests now return in under 2 seconds across all 10 served countries, replacing a manual email-based process.",
     tech: {
       Frontend: ["React", "Vite", "Tailwind"],
       Backend: ["FastAPI", "Python", "MySQL"],
@@ -79,27 +101,35 @@ const projects = [
       { value: "10", label: "Countries served" },
       { value: "<2s", label: "Quote response" },
     ],
-    image:
-      "https://images.unsplash.com/photo-1494412574643-ff11b0a5c1c3?w=900&h=600&fit=crop",
+    screenshot: null,
+    screenshotAlt: "Freight In Time quote request interface",
     live: "https://freightintime.net",
     github: "",
-    size: "large",
   },
   {
     id: "azure-idm",
     title: "Azure Identity Management",
-    tagline: "Enterprise access control at scale",
     type: "Enterprise",
     status: "production",
     featured: true,
     year: "2023",
     color: "#22d3ee",
-    description:
-      "Enterprise-grade identity and access management platform handling Azure AD provisioning, role assignments, onboarding workflows, and access control across multiple enterprise systems.",
+    role: "Solo developer",
+    duration: "2 months",
+    client: "Freight In Time (internal IT)",
+    context:
+      "Internal tool automating Azure AD account provisioning and access control for a multi-office company.",
     problem:
-      "IT teams manually provisioned hundreds of accounts monthly, creating security gaps and onboarding delays.",
+      "IT manually provisioned hundreds of accounts monthly across offices, creating security gaps and onboarding delays of several days per hire.",
     solution:
-      "Automated the full provisioning lifecycle via Microsoft Graph API — role assignment, group sync, and access expiry in one auditable workflow.",
+      "Automated the full provisioning lifecycle through the Microsoft Graph API — role assignment, group sync, and access expiry in one auditable workflow.",
+    myContributions: [
+      "Integrated Microsoft Graph API for automated AD account provisioning",
+      "Built role-assignment and group-sync logic with full audit logging",
+      "Designed access-expiry rules to remove the manual offboarding step",
+    ],
+    outcome:
+      "Cut account provisioning time by roughly 90% and eliminated manual provisioning errors.",
     tech: {
       Backend: ["Laravel", "PHP", "SQL Server"],
       Identity: ["Azure AD", "Microsoft Graph API"],
@@ -108,27 +138,36 @@ const projects = [
       { value: "90%", label: "Faster provisioning" },
       { value: "0", label: "Manual errors" },
     ],
-    image:
-      "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=900&h=600&fit=crop",
+    screenshot: null,
+    screenshotAlt: null,
     live: "https://bizuat.freightintime.com",
     github: "",
-    size: "large",
+    private: true,
   },
   {
     id: "fit-erp",
     title: "FIT Logistics ERP Portal",
-    tagline: "Internal ops platform for regional logistics",
     type: "Corporate",
     status: "production",
     featured: true,
     year: "2023",
     color: "#a78bfa",
-    description:
-      "An internal ERP and CRM platform for a regional logistics company supporting quotation management, customer interactions, multi-office workflows, and operational processes.",
+    role: "Solo developer",
+    duration: "6 months",
+    client: "Freight In Time (6 branch offices)",
+    context:
+      "Internal ERP/CRM unifying quotation management, customer history, and job tracking across branch offices.",
     problem:
       "Disconnected spreadsheets and emails made it impossible to track shipment status, customer history, or team performance across offices.",
     solution:
-      "Unified platform with stored-procedure-driven data layer, role-based dashboards, and real-time job tracking across all branch offices.",
+      "Built a unified platform on a stored-procedure-driven data layer, with role-based dashboards and real-time job tracking across all branches.",
+    myContributions: [
+      "Designed the role-based dashboard system used by all 6 offices",
+      "Worked within existing stored procedures for the data layer rather than duplicating logic in application code",
+      "Built real-time job-status tracking across branch offices",
+    ],
+    outcome:
+      "Unified operations across 6 offices and cut administrative overhead by roughly 40%.",
     tech: {
       Backend: ["Laravel", "PHP", "SQL Server", "MySQL"],
       API: ["REST API", "Stored Procedures"],
@@ -137,101 +176,135 @@ const projects = [
       { value: "6", label: "Offices unified" },
       { value: "40%", label: "Less admin time" },
     ],
-    image:
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=900&h=600&fit=crop",
+    screenshot: null,
+    screenshotAlt: null,
     live: "https://bizuat.freightintime.com",
     github: "",
-    size: "large",
+    private: true,
   },
   {
     id: "login-tracker",
     title: "Login Activity Tracker",
-    tagline: "Security analytics for enterprise apps",
     type: "Enterprise",
     status: "in-use",
     featured: false,
     year: "2023",
     color: "#f59e0b",
-    description:
-      "An analytics platform monitoring user sign-ins across enterprise applications, providing usage insights, inactive user detection, and application access reports.",
+    role: "Solo developer",
+    duration: "3 weeks",
+    client: "Freight In Time (internal IT)",
+    context:
+      "Sign-in analytics across enterprise apps to flag inactive accounts and surface access patterns for security review.",
+    outcome:
+      "Gave IT visibility into inactive accounts that previously went unnoticed for months.",
+    myContributions: [
+      "Built sign-in event aggregation across multiple enterprise applications",
+      "Added inactive-user detection to flag stale accounts for review",
+    ],
     tech: { Stack: ["Laravel", "PHP", "SQL Server", "Azure AD"] },
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&h=450&fit=crop",
+    screenshot: null,
+    screenshotAlt: null,
     live: "https://bizuat.freightintime.com",
     github: "",
-    size: "normal",
+    private: true,
   },
   {
     id: "ecommerce",
     title: "E-Commerce 2.0",
-    tagline: "Modern storefront with Stripe payments",
     type: "Full Stack",
     status: "live",
     featured: false,
     year: "2024",
     color: "#ec4899",
-    description:
-      "A modern e-commerce platform featuring secure Stripe payments, inventory management, and real-time order tracking with an optimized shopping experience.",
+    role: "Solo developer",
+    duration: "6 weeks",
+    client: "Personal project",
+    context:
+      "A storefront built to practice production-grade payment handling and order state management.",
+    outcome:
+      "Fully functional checkout flow with real Stripe payments and live order tracking.",
+    myContributions: [
+      "Integrated Stripe Checkout and webhook-driven order status updates",
+      "Built inventory management with stock-level guards on checkout",
+    ],
     tech: { Stack: ["Next.js", "Stripe", "PostgreSQL"] },
-    image:
-      "https://images.unsplash.com/photo-1557821552-17105176677c?w=700&h=450&fit=crop",
+    screenshot: null,
+    screenshotAlt: "E-Commerce 2.0 storefront",
     live: "https://e-commerce-2-0-coral.vercel.app/",
     github: "https://github.com/nahashon-source/E-commerce-2.0.git",
-    size: "normal",
   },
   {
     id: "fittrack",
     title: "FitTrack",
-    tagline: "Personalized home workout platform",
     type: "Personal",
     status: "live",
     featured: false,
     year: "2024",
     color: "#34d399",
-    description:
-      "A fitness and home workout platform offering personalized exercise plans, progress tracking, and guided workout sessions for users of all fitness levels.",
+    role: "Solo developer",
+    duration: "4 weeks",
+    client: "Personal project",
+    context:
+      "A home workout app with personalized plans and session tracking, built to explore MongoDB schema design for user progress data.",
+    outcome: "Working plan-generation and progress-tracking flow end to end.",
+    myContributions: [
+      "Designed the MongoDB schema for workout plans and progress history",
+      "Built the session-tracking and progress-visualization flow",
+    ],
     tech: { Stack: ["React", "Node.js", "Express", "MongoDB"] },
-    image:
-      "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=700&h=450&fit=crop",
+    screenshot: null,
+    screenshotAlt: "FitTrack workout tracking interface",
     live: "https://lucent-malabi-881720.netlify.app/",
     github: "https://github.com/nahashon-source/FItness.git",
-    size: "normal",
   },
   {
     id: "moviebox",
     title: "MovieBox",
-    tagline: "Cinematic discovery experience",
     type: "Frontend",
     status: "live",
     featured: false,
     year: "2023",
     color: "#f97316",
-    description:
-      "A movie discovery application allowing users to search movies, explore detailed information, and save favorites using modern UI components and external APIs.",
+    role: "Solo developer",
+    duration: "2 weeks",
+    client: "Personal project",
+    context:
+      "A movie discovery app built to practice consuming a third-party API cleanly and handling its rate limits.",
+    outcome:
+      "Search, detail views, and saved favorites against a live external API.",
+    myContributions: [
+      "Built search and favorites against a rate-limited external movie API",
+      "Handled API error and empty states across the UI",
+    ],
     tech: { Stack: ["React", "JavaScript", "Axios", "Material-UI"] },
-    image:
-      "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=700&h=450&fit=crop",
+    screenshot: null,
+    screenshotAlt: "MovieBox movie search interface",
     live: "https://movies-box-t3b2.vercel.app/",
     github: "https://github.com/Willigers1/movies-box.git",
-    size: "normal",
   },
   {
     id: "dynamic-parcel",
     title: "Dynamic Parcel EA",
-    tagline: "Courier logistics for East Africa",
     type: "Corporate",
     status: "live",
     featured: false,
     year: "2024",
     color: "#22d3ee",
-    description:
-      "A courier and parcel delivery website serving East Africa with modern interfaces, delivery solutions, and regional logistics services.",
+    role: "Solo developer",
+    duration: "5 weeks",
+    client: "Dynamic Parcel (East Africa courier service)",
+    context:
+      "Public site for a courier and parcel delivery service operating across East Africa.",
+    outcome: "Live regional site handling delivery service inquiries.",
+    myContributions: [
+      "Built the responsive marketing site and service pages in TypeScript/React",
+      "Implemented the Tailwind design system used across all pages",
+    ],
     tech: { Stack: ["TypeScript", "React", "Tailwind CSS"] },
-    image:
-      "https://images.unsplash.com/photo-1580674285054-bed31e145f59?w=700&h=450&fit=crop",
+    screenshot: null,
+    screenshotAlt: "Dynamic Parcel EA homepage",
     live: "https://dynamicparcelea.com/",
     github: "",
-    size: "normal",
   },
 ];
 
@@ -284,7 +357,7 @@ const ALL_TAGS = [
   "Flask",
 ];
 
-const Ticker = () => {
+const Ticker = ({ reduceMotion }) => {
   const duplicated = [...ALL_TAGS, ...ALL_TAGS];
   return (
     <div
@@ -297,7 +370,7 @@ const Ticker = () => {
     >
       <motion.div
         className="flex gap-6 whitespace-nowrap"
-        animate={{ x: ["0%", "-50%"] }}
+        animate={reduceMotion ? {} : { x: ["0%", "-50%"] }}
         transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
       >
         {duplicated.map((tag, i) => (
@@ -374,19 +447,169 @@ const TechPills = ({ tech, color }) => {
   );
 };
 
+// ─── Code-pattern fallback panel ───────────────────────────────────────────────
+//
+// Renders in place of a screenshot whenever `screenshot` is null — covers
+// both "no screenshot captured yet" and "private/NDA" cases for now.
+// Deliberately code-flavored rather than a generic placeholder icon, since
+// it should look like a designed choice, not a missing asset.
+//
+// NOTE: dedicated NDA/redacted-document treatment is pending — see plan.
+// This is the shared fallback both cases currently use.
+
+const CodePatternPanel = ({ project }) => {
+  const rgb = hexToRgb(project.color);
+  const isPrivate = Boolean(project.private);
+
+  return (
+    <div
+      className="relative w-full h-full flex flex-col items-center justify-center px-8 py-10"
+      style={{
+        background: `linear-gradient(135deg, rgba(${rgb},0.08), rgba(${rgb},0.015))`,
+      }}
+    >
+      <div
+        aria-hidden
+        className="absolute inset-0 opacity-[0.04]"
+        style={{
+          backgroundImage: `linear-gradient(rgba(${rgb},0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(${rgb},0.6) 1px, transparent 1px)`,
+          backgroundSize: "28px 28px",
+        }}
+      />
+
+      <Terminal
+        size={22}
+        style={{ color: `rgba(${rgb}, 0.4)` }}
+        className="mb-4 relative z-10"
+        aria-hidden="true"
+      />
+
+      <p
+        className="font-mono text-[11px] text-center leading-relaxed relative z-10"
+        style={{ color: "rgba(255,255,255,0.3)", maxWidth: 220 }}
+      >
+        {isPrivate ? (
+          <>
+            <span style={{ color: `rgba(${rgb}, 0.55)` }}>access:</span>{" "}
+            restricted
+            <br />
+            <span style={{ color: `rgba(${rgb}, 0.55)` }}>reason:</span> client
+            NDA
+          </>
+        ) : (
+          <>
+            <span style={{ color: `rgba(${rgb}, 0.55)` }}>screenshot:</span>{" "}
+            pending
+            <br />
+            <span style={{ color: `rgba(${rgb}, 0.55)` }}>
+              visit live site →
+            </span>
+          </>
+        )}
+      </p>
+    </div>
+  );
+};
+
+// ─── Engineering notes (replaces image-side trivia in featured card) ──────────
+
+const EngineeringNotes = ({ project }) => {
+  const rgb = hexToRgb(project.color);
+  if (!project.myContributions?.length) return null;
+
+  return (
+    <div
+      className="h-full flex flex-col p-7"
+      style={{ background: `rgba(${rgb}, 0.03)` }}
+    >
+      <div className="mb-5">
+        <p
+          className="text-[9px] font-bold tracking-[0.18em] uppercase mb-3"
+          style={{ color: `rgba(${rgb}, 0.5)` }}
+        >
+          Engineering notes
+        </p>
+        <ul className="space-y-3">
+          {project.myContributions.map((item, i) => (
+            <li key={i} className="flex gap-2.5 text-[12px] leading-relaxed">
+              <span
+                className="flex-shrink-0 mt-1.5 w-1 h-1 rounded-full"
+                style={{ background: project.color }}
+                aria-hidden="true"
+              />
+              <span style={{ color: "rgba(255,255,255,0.45)" }}>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div
+        className="mt-auto pt-5 grid grid-cols-2 gap-3"
+        style={{ borderTop: `1px solid rgba(${rgb}, 0.1)` }}
+      >
+        <div>
+          <p
+            className="text-[9px] font-bold tracking-[0.15em] uppercase mb-1"
+            style={{ color: "rgba(255,255,255,0.2)" }}
+          >
+            Role
+          </p>
+          <p
+            className="text-[12px]"
+            style={{ color: "rgba(255,255,255,0.55)" }}
+          >
+            {project.role}
+          </p>
+        </div>
+        <div>
+          <p
+            className="text-[9px] font-bold tracking-[0.15em] uppercase mb-1"
+            style={{ color: "rgba(255,255,255,0.2)" }}
+          >
+            Duration
+          </p>
+          <p
+            className="text-[12px]"
+            style={{ color: "rgba(255,255,255,0.55)" }}
+          >
+            {project.duration}
+          </p>
+        </div>
+        {project.client && (
+          <div className="col-span-2">
+            <p
+              className="text-[9px] font-bold tracking-[0.15em] uppercase mb-1"
+              style={{ color: "rgba(255,255,255,0.2)" }}
+            >
+              Client
+            </p>
+            <p
+              className="text-[12px]"
+              style={{ color: "rgba(255,255,255,0.55)" }}
+            >
+              {project.client}
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 // ─── Featured Case Study Card ──────────────────────────────────────────────────
 
-const FeaturedCard = ({ project, index }) => {
+const FeaturedCard = ({ project, index, reduceMotion }) => {
   const [hovered, setHovered] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const rgb = hexToRgb(project.color);
   const TypeIcon = TYPE_ICON[project.type] ?? Globe;
   const isEven = index % 2 === 0;
+  const panelId = `${project.id}-challenge-panel`;
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 32 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 32 }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-60px" }}
       transition={{
         duration: 0.7,
@@ -407,7 +630,7 @@ const FeaturedCard = ({ project, index }) => {
       <motion.div
         aria-hidden
         className="absolute inset-0 pointer-events-none"
-        animate={{ opacity: hovered ? 1 : 0 }}
+        animate={{ opacity: hovered && !reduceMotion ? 1 : 0 }}
         transition={{ duration: 0.5 }}
         style={{
           background: isEven
@@ -452,7 +675,7 @@ const FeaturedCard = ({ project, index }) => {
                   color: "rgba(255,255,255,0.3)",
                 }}
               >
-                <TypeIcon size={10} />
+                <TypeIcon size={10} aria-hidden="true" />
                 {project.type}
               </span>
               <span
@@ -468,40 +691,67 @@ const FeaturedCard = ({ project, index }) => {
               {project.title}
             </h3>
             <p
-              className="text-sm mb-5 font-medium"
-              style={{ color: project.color, opacity: 0.8 }}
+              className="text-[13px] mb-5"
+              style={{ color: "rgba(255,255,255,0.3)" }}
             >
-              {project.tagline}
+              {project.role}
+              {project.duration ? ` · ${project.duration}` : ""}
             </p>
             <p
               className="text-[13.5px] leading-relaxed mb-7"
               style={{ color: "rgba(255,255,255,0.38)", maxWidth: 460 }}
             >
-              {project.description}
+              {project.context}
             </p>
+
+            {/* Outcome line — promoted result, not buried in metrics */}
+            {project.outcome && (
+              <div
+                className="mb-7 pl-4"
+                style={{ borderLeft: `2px solid rgba(${rgb}, 0.35)` }}
+              >
+                <p
+                  className="text-[13px] leading-relaxed italic"
+                  style={{ color: "rgba(255,255,255,0.55)" }}
+                >
+                  {project.outcome}
+                </p>
+              </div>
+            )}
 
             {/* Expandable problem/solution */}
             {(project.problem || project.solution) && (
               <div className="mb-7">
                 <button
                   onClick={() => setExpanded((v) => !v)}
-                  className="flex items-center gap-2 text-[11px] font-medium mb-0 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                  className="flex items-center gap-2 text-[11px] font-medium mb-0 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e1420] focus-visible:ring-indigo-400"
                   style={{ color: "rgba(255,255,255,0.28)" }}
                   aria-expanded={expanded}
+                  aria-controls={panelId}
                 >
                   {expanded ? (
-                    <ChevronUp size={12} />
+                    <ChevronUp size={12} aria-hidden="true" />
                   ) : (
-                    <ChevronDown size={12} />
+                    <ChevronDown size={12} aria-hidden="true" />
                   )}
                   {expanded ? "Hide" : "Show"} challenge & approach
                 </button>
                 <AnimatePresence initial={false}>
                   {expanded && (
                     <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
+                      id={panelId}
+                      role="region"
+                      initial={reduceMotion ? false : { height: 0, opacity: 0 }}
+                      animate={
+                        reduceMotion
+                          ? { opacity: 1 }
+                          : { height: "auto", opacity: 1 }
+                      }
+                      exit={
+                        reduceMotion
+                          ? { opacity: 0 }
+                          : { height: 0, opacity: 0 }
+                      }
                       transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
                       className="overflow-hidden"
                     >
@@ -603,7 +853,7 @@ const FeaturedCard = ({ project, index }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${project.title} source code`}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e1420] focus-visible:ring-indigo-400 focus:outline-none"
                 style={{
                   background: "rgba(255,255,255,0.03)",
                   border: "1px solid rgba(255,255,255,0.08)",
@@ -616,7 +866,7 @@ const FeaturedCard = ({ project, index }) => {
                 }}
                 whileTap={{ scale: 0.96 }}
               >
-                <Github size={13} />
+                <Github size={13} aria-hidden="true" />
                 Source code
               </motion.a>
             )}
@@ -626,7 +876,7 @@ const FeaturedCard = ({ project, index }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Visit ${project.title}`}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-white"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-white focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e1420] focus-visible:ring-indigo-400 focus:outline-none"
                 style={{
                   background: `linear-gradient(135deg, rgba(${rgb}, 0.5), rgba(${rgb}, 0.2))`,
                   border: `1px solid rgba(${rgb}, 0.32)`,
@@ -638,7 +888,7 @@ const FeaturedCard = ({ project, index }) => {
                 }}
                 whileTap={{ scale: 0.96 }}
               >
-                <ArrowUpRight size={13} />
+                <ArrowUpRight size={13} aria-hidden="true" />
                 {project.github ? "Live demo" : "View project"}
               </motion.a>
             )}
@@ -647,14 +897,14 @@ const FeaturedCard = ({ project, index }) => {
                 className="flex items-center gap-1.5 text-xs"
                 style={{ color: "rgba(255,255,255,0.2)" }}
               >
-                <Lock size={11} />
+                <Lock size={11} aria-hidden="true" />
                 Private / NDA
               </span>
             )}
           </div>
         </div>
 
-        {/* Image panel */}
+        {/* Side panel — screenshot, code-pattern fallback, or engineering notes */}
         <div
           className="relative hidden lg:block overflow-hidden flex-shrink-0"
           style={{
@@ -663,13 +913,13 @@ const FeaturedCard = ({ project, index }) => {
             borderRight: !isEven ? `1px solid rgba(${rgb}, 0.1)` : "none",
           }}
         >
-          {project.image ? (
+          {project.screenshot ? (
             <motion.img
-              src={project.image}
-              alt={`${project.title} screenshot`}
+              src={project.screenshot}
+              alt={project.screenshotAlt || `${project.title} screenshot`}
               className="w-full h-full object-cover"
               style={{ minHeight: 340 }}
-              animate={{ scale: hovered ? 1.05 : 1 }}
+              animate={{ scale: hovered && !reduceMotion ? 1.05 : 1 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
               loading="lazy"
               onError={(e) => {
@@ -677,47 +927,10 @@ const FeaturedCard = ({ project, index }) => {
               }}
             />
           ) : (
-            <div
-              className="absolute inset-0 flex items-center justify-center font-black text-[72px] select-none"
-              style={{
-                background: `linear-gradient(135deg, rgba(${rgb},0.1), rgba(${rgb},0.02))`,
-                color: `rgba(${rgb}, 0.15)`,
-                letterSpacing: "-4px",
-              }}
-            >
-              {project.title.slice(0, 2).toUpperCase()}
+            <div style={{ minHeight: 340, height: "100%" }}>
+              <EngineeringNotes project={project} />
             </div>
           )}
-
-          {/* Fade edge */}
-          <div
-            className="absolute inset-y-0 pointer-events-none"
-            style={{
-              [isEven ? "left" : "right"]: 0,
-              width: 80,
-              background: isEven
-                ? "linear-gradient(to right, rgba(14,20,32,0.95), transparent)"
-                : "linear-gradient(to left, rgba(14,20,32,0.95), transparent)",
-            }}
-          />
-
-          {/* Status overlay */}
-          <div
-            className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-lg px-3.5 py-2 font-mono text-[10px] whitespace-nowrap"
-            style={{
-              background: "rgba(6,10,15,0.85)",
-              border: `1px solid rgba(${rgb}, 0.18)`,
-              color: "rgba(255,255,255,0.45)",
-              backdropFilter: "blur(10px)",
-            }}
-          >
-            <span style={{ color: "#818cf8" }}>const </span>
-            <span style={{ color: "#67e8f9" }}>
-              {project.id.replace(/-/g, "_")}
-            </span>
-            <span style={{ color: "#94a3b8" }}> = </span>
-            <span style={{ color: "#34d399" }}>✓</span>
-          </div>
         </div>
       </div>
     </motion.article>
@@ -726,15 +939,15 @@ const FeaturedCard = ({ project, index }) => {
 
 // ─── Compact Grid Card ────────────────────────────────────────────────────────
 
-const GridCard = ({ project, index }) => {
+const GridCard = ({ project, index, reduceMotion }) => {
   const [hovered, setHovered] = useState(false);
   const rgb = hexToRgb(project.color);
   const TypeIcon = TYPE_ICON[project.type] ?? Globe;
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{
         duration: 0.5,
@@ -755,21 +968,21 @@ const GridCard = ({ project, index }) => {
       <motion.div
         aria-hidden
         className="absolute inset-x-0 top-0 h-32 pointer-events-none"
-        animate={{ opacity: hovered ? 1 : 0 }}
+        animate={{ opacity: hovered && !reduceMotion ? 1 : 0 }}
         transition={{ duration: 0.4 }}
         style={{
           background: `radial-gradient(ellipse at 50% -20%, rgba(${rgb}, 0.12) 0%, transparent 70%)`,
         }}
       />
 
-      {/* Image */}
-      <div className="relative overflow-hidden" style={{ height: 180 }}>
-        {project.image ? (
+      {/* Image / fallback */}
+      <div className="relative overflow-hidden" style={{ height: 160 }}>
+        {project.screenshot ? (
           <motion.img
-            src={project.image}
-            alt={`${project.title} preview`}
+            src={project.screenshot}
+            alt={project.screenshotAlt || `${project.title} preview`}
             className="w-full h-full object-cover"
-            animate={{ scale: hovered ? 1.07 : 1 }}
+            animate={{ scale: hovered && !reduceMotion ? 1.07 : 1 }}
             transition={{ duration: 0.6, ease: "easeOut" }}
             loading="lazy"
             onError={(e) => {
@@ -777,15 +990,7 @@ const GridCard = ({ project, index }) => {
             }}
           />
         ) : (
-          <div
-            className="w-full h-full flex items-center justify-center font-black text-5xl select-none"
-            style={{
-              background: `rgba(${rgb}, 0.06)`,
-              color: `rgba(${rgb}, 0.15)`,
-            }}
-          >
-            {project.title.slice(0, 2).toUpperCase()}
-          </div>
+          <CodePatternPanel project={project} />
         )}
         <div
           className="absolute inset-0 pointer-events-none"
@@ -795,7 +1000,6 @@ const GridCard = ({ project, index }) => {
           }}
         />
 
-        {/* Type badge on image */}
         <div className="absolute top-3 left-3">
           <span
             className="flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-medium"
@@ -806,7 +1010,7 @@ const GridCard = ({ project, index }) => {
               backdropFilter: "blur(8px)",
             }}
           >
-            <TypeIcon size={9} />
+            <TypeIcon size={9} aria-hidden="true" />
             {project.type}
           </span>
         </div>
@@ -830,16 +1034,19 @@ const GridCard = ({ project, index }) => {
           </span>
         </div>
         <p
-          className="text-xs mb-3 font-medium"
-          style={{ color: project.color, opacity: 0.7 }}
+          className="text-[11px] mb-3"
+          style={{ color: "rgba(255,255,255,0.28)" }}
         >
-          {project.tagline}
+          {project.role}
+          {project.duration ? ` · ${project.duration}` : ""}
         </p>
+
+        {/* Outcome-first copy, replaces marketing tagline */}
         <p
           className="text-[12px] leading-relaxed mb-4 flex-1"
-          style={{ color: "rgba(255,255,255,0.32)" }}
+          style={{ color: "rgba(255,255,255,0.4)" }}
         >
-          {project.description}
+          {project.outcome || project.context}
         </p>
 
         <TechPills tech={project.tech} color={project.color} />
@@ -855,7 +1062,7 @@ const GridCard = ({ project, index }) => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`${project.title} GitHub`}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-medium"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e1420] focus-visible:ring-indigo-400 focus:outline-none"
               style={{
                 background: "rgba(255,255,255,0.03)",
                 border: "1px solid rgba(255,255,255,0.07)",
@@ -864,7 +1071,7 @@ const GridCard = ({ project, index }) => {
               whileHover={{ scale: 1.04, color: "#fff" }}
               whileTap={{ scale: 0.96 }}
             >
-              <Github size={11} /> Code
+              <Github size={11} aria-hidden="true" /> Code
             </motion.a>
           )}
           {project.live ? (
@@ -873,7 +1080,7 @@ const GridCard = ({ project, index }) => {
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Visit ${project.title}`}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-white ml-auto"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-semibold ml-auto focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e1420] focus-visible:ring-indigo-400 focus:outline-none"
               style={{
                 background: `rgba(${rgb}, 0.15)`,
                 border: `1px solid rgba(${rgb}, 0.25)`,
@@ -882,14 +1089,14 @@ const GridCard = ({ project, index }) => {
               whileHover={{ scale: 1.04, background: `rgba(${rgb}, 0.22)` }}
               whileTap={{ scale: 0.96 }}
             >
-              <ArrowUpRight size={11} /> Visit
+              <ArrowUpRight size={11} aria-hidden="true" /> Visit
             </motion.a>
           ) : (
             <span
               className="flex items-center gap-1 text-[11px] ml-auto"
               style={{ color: "rgba(255,255,255,0.18)" }}
             >
-              <Lock size={10} /> Private
+              <Lock size={10} aria-hidden="true" /> Private
             </span>
           )}
         </div>
@@ -901,6 +1108,7 @@ const GridCard = ({ project, index }) => {
 // ─── Projects Section ─────────────────────────────────────────────────────────
 
 const Projects = () => {
+  const reduceMotion = useReducedMotion();
   const featured = projects.filter((p) => p.featured);
   const rest = projects.filter((p) => !p.featured);
 
@@ -946,8 +1154,8 @@ const Projects = () => {
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         {/* Section header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 20 }}
+          whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="mb-16"
@@ -979,19 +1187,19 @@ const Projects = () => {
               className="text-[14px] leading-relaxed max-w-xs"
               style={{ color: "rgba(255,255,255,0.3)" }}
             >
-              Enterprise platforms, logistics tools, and consumer products —
-              built to solve real operational problems.
+              Built solo, end to end — from API design to production deploys,
+              for real operational problems across East Africa.
             </p>
           </div>
         </motion.div>
 
         {/* Tech ticker */}
-        <Ticker />
+        <Ticker reduceMotion={reduceMotion} />
 
         {/* Currently building */}
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+          whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
           className="flex items-center gap-3 rounded-2xl px-5 py-4 mb-12"
@@ -1000,7 +1208,12 @@ const Projects = () => {
             border: "1px solid rgba(52,211,153,0.12)",
           }}
         >
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
+          <span
+            className={`w-2 h-2 rounded-full bg-emerald-400 flex-shrink-0 ${
+              reduceMotion ? "" : "animate-pulse"
+            }`}
+            aria-hidden="true"
+          />
           <span
             className="text-[13px]"
             style={{ color: "rgba(255,255,255,0.4)" }}
@@ -1026,7 +1239,12 @@ const Projects = () => {
         {featured.length > 0 && (
           <div className="space-y-5 mb-16">
             {featured.map((project, i) => (
-              <FeaturedCard key={project.id} project={project} index={i} />
+              <FeaturedCard
+                key={project.id}
+                project={project}
+                index={i}
+                reduceMotion={reduceMotion}
+              />
             ))}
           </div>
         )}
@@ -1035,8 +1253,8 @@ const Projects = () => {
         {rest.length > 0 && (
           <>
             <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
+              initial={reduceMotion ? false : { opacity: 0 }}
+              whileInView={reduceMotion ? undefined : { opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
               className="flex items-center gap-4 mb-7"
@@ -1055,7 +1273,12 @@ const Projects = () => {
 
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
               {rest.map((project, i) => (
-                <GridCard key={project.id} project={project} index={i} />
+                <GridCard
+                  key={project.id}
+                  project={project}
+                  index={i}
+                  reduceMotion={reduceMotion}
+                />
               ))}
             </div>
           </>
@@ -1063,8 +1286,8 @@ const Projects = () => {
 
         {/* Footer */}
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+          whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="text-center mt-16 flex flex-col items-center gap-4"
@@ -1076,7 +1299,7 @@ const Projects = () => {
             href="https://github.com/nahashon-source"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-medium"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#060A0F] focus-visible:ring-indigo-400 focus:outline-none"
             style={{
               background: "rgba(255,255,255,0.03)",
               border: "1px solid rgba(255,255,255,0.07)",
@@ -1090,9 +1313,9 @@ const Projects = () => {
             }}
             whileTap={{ scale: 0.97 }}
           >
-            <Github size={13} />
+            <Github size={13} aria-hidden="true" />
             github.com/nahashon-source
-            <ArrowUpRight size={12} />
+            <ArrowUpRight size={12} aria-hidden="true" />
           </motion.a>
         </motion.div>
       </div>

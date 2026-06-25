@@ -10,6 +10,7 @@ import {
   Globe,
   ArrowRight,
   Coffee,
+  Network,
 } from "lucide-react";
 import CountUp from "react-countup";
 
@@ -17,27 +18,27 @@ import CountUp from "react-countup";
 
 const TIMELINE = [
   {
-    year: "2022",
+    year: "2021",
     title: "Started the journey",
-    desc: "Wrote my first line of HTML. Got immediately obsessed.",
+    desc: "Wrote my first lines of code and got hooked on building things.",
     color: "#818cf8",
   },
   {
-    year: "2023",
-    title: "First full-stack project",
-    desc: "Built a Laravel + React app from scratch. Shipped it.",
+    year: "2022",
+    title: "Moringa School",
+    desc: "Completed an intensive Software Engineering program — full-stack development, databases, and APIs.",
     color: "#67e8f9",
   },
   {
-    year: "2024",
-    title: "Enterprise systems",
-    desc: "Integrated SQL Server, Azure Blob, and FastAPI in production.",
+    year: "2025",
+    title: "Internship at Freight In Time",
+    desc: "One-year internship at FIT (JKIA) — Laravel development, logistics systems, and IT support.",
     color: "#a78bfa",
   },
   {
-    year: "2025",
-    title: "Logistics platform",
-    desc: "Leading digital infrastructure for Freight In Time (FIT).",
+    year: "2026",
+    title: "Growing as a developer",
+    desc: "Building backend-focused full-stack applications and open to new opportunities.",
     color: "#34d399",
   },
 ];
@@ -46,46 +47,45 @@ const HIGHLIGHTS = [
   {
     icon: Code2,
     title: "Full-Stack Development",
-    desc: "Scalable apps from database to UI — React, FastAPI, Laravel, PostgreSQL.",
+    desc: "Building apps end-to-end with React, Laravel, FastAPI, and SQL databases.",
     color: "#818cf8",
   },
   {
     icon: Globe,
-    title: "API & Systems Integration",
-    desc: "Connecting ERP systems, external APIs, and cloud services into one flow.",
+    title: "Backend & APIs",
+    desc: "Comfortable designing REST APIs and backend logic for real-world systems.",
     color: "#67e8f9",
   },
   {
-    icon: HeartHandshake,
-    title: "User-Focused Engineering",
-    desc: "Every decision is made with the end user in mind. Always.",
+    icon: Network,
+    title: "IT & Systems Support",
+    desc: "Hands-on experience with networking, system setup, and internal IT support.",
     color: "#a78bfa",
   },
   {
     icon: BookOpen,
     title: "Continuous Learning",
-    desc: "Always shipping, always reading, always one framework ahead.",
+    desc: "Always learning — currently deepening backend and systems engineering skills.",
     color: "#34d399",
   },
 ];
 
 const STATS = [
-  { value: 9, suffix: "+", label: "Projects shipped" },
-  { value: 2, suffix: "+", label: "Years building" },
-  { value: 15, suffix: "+", label: "Technologies" },
+  { value: 4, suffix: "+", label: "Projects shipped" },
+  { value: 3, suffix: "+", label: "Years building" },
+  { value: 8, suffix: "+", label: "Technologies" },
   { value: 100, suffix: "%", label: "Dedication" },
 ];
 
 const STACK_CHIPS = [
   "React",
-  "TypeScript",
-  "FastAPI",
+  "JavaScript",
   "Laravel",
+  "FastAPI",
+  "PHP",
   "PostgreSQL",
   "MySQL",
-  "Docker",
-  "Azure",
-  "Vercel",
+  "Tailwind CSS",
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -332,11 +332,14 @@ const About = () => {
               className="text-[15px] leading-relaxed mb-4 max-w-lg"
               style={{ color: "rgba(255,255,255,0.55)" }}
             >
-              I'm a full-stack developer who builds systems that work — not just
-              look good. From shipping ERP integrations at scale to designing
-              APIs consumed by real logistics operations, I focus on code that{" "}
+              I'm a full-stack developer from Nairobi, Kenya, and a graduate of
+              Moringa School's Software Engineering program. During a one-year
+              internship at Freight In Time (FIT) at JKIA, I worked on Laravel
+              applications, logistics-related systems, and hands-on IT support —
+              from networking and system configuration to building internal
+              tools. I care about writing code that{" "}
               <span className="text-white font-medium">
-                solves actual problems
+                solves real problems
               </span>
               .
             </p>
@@ -344,9 +347,11 @@ const About = () => {
               className="text-[14px] leading-relaxed max-w-lg"
               style={{ color: "rgba(255,255,255,0.35)" }}
             >
-              Whether it's a React interface, a FastAPI service, or a Laravel
-              backend — I care about clean architecture, developer experience,
-              and shipping things that last.
+              I enjoy working across the stack — React on the frontend, Laravel
+              and FastAPI on the backend — but I'm especially drawn to backend
+              development, APIs, and enterprise systems. I'm currently building
+              logistics and business applications, and open to full-time
+              opportunities.
             </p>
           </motion.div>
 
@@ -539,10 +544,13 @@ const About = () => {
             </div>
             <div className="space-y-3">
               {[
-                ["Web applications", "React · TypeScript · Tailwind"],
-                ["APIs & backends", "FastAPI · Laravel · Node.js"],
-                ["Database systems", "PostgreSQL · MySQL · SQL Server"],
-                ["Cloud & DevOps", "Docker · Azure · Vercel · Render"],
+                ["Web applications", "React · JavaScript · Tailwind CSS"],
+                ["APIs & backends", "Laravel · FastAPI · PHP"],
+                ["Database systems", "PostgreSQL · MySQL"],
+                [
+                  "IT & networking support",
+                  "Windows · routers · network setup",
+                ],
               ].map(([cat, stack]) => (
                 <div
                   key={cat}
@@ -598,8 +606,9 @@ const About = () => {
                 className="text-sm leading-relaxed"
                 style={{ color: "rgba(255,255,255,0.38)" }}
               >
-                Open to full-time roles, freelance contracts, and interesting
-                problems that need a sharp engineering mind.
+                Open to full-time roles and full-stack/backend opportunities
+                where I can keep learning, contribute to real systems, and grow
+                as an engineer.
               </p>
             </div>
 

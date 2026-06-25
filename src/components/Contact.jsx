@@ -18,6 +18,15 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import {
+  fadeUp,
+  cardReveal,
+  slideIn,
+  toastAnimation,
+  socialHover,
+  spinLoop,
+  VIEWPORT_DEFAULT,
+} from "../animations/motionPresets";
 
 /* ------------------------------------------------------------------ */
 /*  Content — edit these to update the section                         */
@@ -260,8 +269,7 @@ function LogOutput({ log, reduceMotion }) {
         {log.map((line, i) => (
           <motion.div
             key={`${line.text}-${i}`}
-            initial={reduceMotion ? false : { opacity: 0, x: -6 }}
-            animate={{ opacity: 1, x: 0 }}
+            {...slideIn(reduceMotion)}
             className={line.ok ? "text-white/50" : "text-rose-300"}
           >
             <span className="text-white/25">$</span> {line.text}{" "}
@@ -287,13 +295,7 @@ function TerminalCard({
   const isError = status === "error";
 
   return (
-    <motion.div
-      initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="relative"
-    >
+    <motion.div {...cardReveal(reduceMotion)} className="relative">
       {!reduceMotion && (
         <motion.div
           aria-hidden="true"
@@ -302,8 +304,7 @@ function TerminalCard({
             background:
               "conic-gradient(from 0deg, #6366f1, #22d3ee, #34d399, #6366f1)",
           }}
-          animate={{ rotate: 360 }}
-          transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
+          {...spinLoop}
         />
       )}
 
@@ -479,8 +480,7 @@ function ContactRail({ copiedId, onCopy }) {
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              whileHover={{ y: -3 }}
-              whileTap={{ scale: 0.95 }}
+              {...socialHover}
               aria-label={name}
               title={name}
               className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/[0.03] border border-white/[0.07]
@@ -510,9 +510,7 @@ function Toast({ toast, onDismiss }) {
           <motion.div
             role={toast.type === "error" ? "alert" : "status"}
             aria-live={toast.type === "error" ? "assertive" : "polite"}
-            initial={{ opacity: 0, y: 12, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.96 }}
+            {...toastAnimation}
             className={`pointer-events-auto flex items-center gap-3 rounded-xl border px-4 py-3 backdrop-blur-xl shadow-lg
               ${
                 toast.type === "error"
@@ -632,13 +630,7 @@ export default function Contact() {
       </div>
 
       <div className="container mx-auto px-6">
-        <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="max-w-2xl mb-12"
-        >
+        <motion.div {...fadeUp(reduceMotion)} className="max-w-2xl mb-12">
           <span className="inline-flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/[0.06] px-3 py-1 text-xs font-mono text-emerald-300 mb-5">
             <span className="relative flex h-2 w-2">
               <span
@@ -666,10 +658,9 @@ export default function Contact() {
         </motion.div>
 
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          {...fadeUp(reduceMotion, {
+            transition: { duration: 0.6, delay: 0.1 },
+          })}
           className="mb-10"
         >
           <StatusStrip localTime={localTime} reduceMotion={reduceMotion} />
