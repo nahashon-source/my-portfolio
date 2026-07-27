@@ -843,7 +843,7 @@ const FeaturedCard = ({ project, index, reduceMotion }) => {
           </div>
 
           {/* Actions */}
-          <div
+          {/* <div
             className="flex flex-wrap items-center gap-2 pt-6"
             style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
           >
@@ -868,6 +868,36 @@ const FeaturedCard = ({ project, index, reduceMotion }) => {
                 <ArrowUpRight size={13} aria-hidden="true" />
                 {project.github ? "Live demo" : "View project"}
               </motion.a>
+            )}
+            {!project.github && !project.live && (
+              <span
+                className="flex items-center gap-1.5 text-xs"
+                style={{ color: "rgba(255,255,255,0.2)" }}
+              >
+                <Lock size={11} aria-hidden="true" />
+                Private / NDA
+              </span>
+            )}
+          </div> */}
+          {/* Actions */}
+          <div
+            className="flex flex-wrap items-center gap-2 pt-6"
+            style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+          >
+            {project.live && (
+              <span
+                aria-disabled="true"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold select-none"
+                style={{
+                  background: "rgba(255,255,255,0.03)",
+                  border: "1px solid rgba(255,255,255,0.07)",
+                  color: "rgba(255,255,255,0.2)",
+                  cursor: "not-allowed",
+                }}
+              >
+                <ArrowUpRight size={13} aria-hidden="true" />
+                {project.github ? "Live demo" : "View project"}
+              </span>
             )}
             {!project.github && !project.live && (
               <span
@@ -1029,7 +1059,7 @@ const GridCard = ({ project, index, reduceMotion }) => {
         <TechPills tech={project.tech} color={project.color} />
 
         {/* Footer actions */}
-        <div
+        {/* <div
           className="flex items-center gap-2 mt-4 pt-4"
           style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
         >
@@ -1050,6 +1080,32 @@ const GridCard = ({ project, index, reduceMotion }) => {
             >
               <ArrowUpRight size={11} aria-hidden="true" /> Visit
             </motion.a>
+          ) : (
+            <span
+              className="flex items-center gap-1 text-[11px] ml-auto"
+              style={{ color: "rgba(255,255,255,0.18)" }}
+            >
+              <Lock size={10} aria-hidden="true" /> Private
+            </span>
+          )}
+        </div> */}
+        <div
+          className="flex items-center gap-2 mt-4 pt-4"
+          style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
+        >
+          {project.live ? (
+            <span
+              aria-disabled="true"
+              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-semibold ml-auto select-none"
+              style={{
+                background: "rgba(255,255,255,0.03)",
+                border: "1px solid rgba(255,255,255,0.07)",
+                color: "rgba(255,255,255,0.2)",
+                cursor: "not-allowed",
+              }}
+            >
+              <ArrowUpRight size={11} aria-hidden="true" /> Visit
+            </span>
           ) : (
             <span
               className="flex items-center gap-1 text-[11px] ml-auto"

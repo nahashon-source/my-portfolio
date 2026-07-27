@@ -1,8 +1,21 @@
 import React, { useState, useRef, useCallback, useEffect } from "react";
-import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion";
 import {
-  Github, ExternalLink, Lock, Users, Zap,
-  ArrowUpRight, ChevronDown, ChevronUp, Circle,
+  motion,
+  useMotionValue,
+  useSpring,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
+import {
+  Github,
+  ExternalLink,
+  Lock,
+  Users,
+  Zap,
+  ArrowUpRight,
+  ChevronDown,
+  ChevronUp,
+  Circle,
 } from "lucide-react";
 
 // ─── Exports (used by FeaturedCard in Projects.jsx) ──────────────────────────
@@ -16,16 +29,16 @@ export function hexToRgb(hex) {
 }
 
 export const TYPE_META = {
-  client:     { label: "Client",      Icon: Lock },
-  solo:       { label: "Solo",        Icon: Users },
+  client: { label: "Client", Icon: Lock },
+  solo: { label: "Solo", Icon: Users },
   opensource: { label: "Open Source", Icon: Zap },
 };
 
 export const STATUS_STYLE = {
-  active:        { label: "Active",      color: "#34d399" },
-  live:          { label: "Live",        color: "#34d399" },
+  active: { label: "Active", color: "#34d399" },
+  live: { label: "Live", color: "#34d399" },
   "in-progress": { label: "In progress", color: "#fbbf24" },
-  completed:     { label: "Completed",   color: "#818cf8" },
+  completed: { label: "Completed", color: "#818cf8" },
 };
 
 // ─── Browser mockup wrapper ───────────────────────────────────────────────────
@@ -44,7 +57,10 @@ const BrowserMockup = ({ children, color }) => {
       {/* Browser chrome */}
       <div
         className="flex items-center gap-1.5 px-3 py-2 flex-shrink-0"
-        style={{ background: "rgba(255,255,255,0.03)", borderBottom: `1px solid rgba(${rgb}, 0.08)` }}
+        style={{
+          background: "rgba(255,255,255,0.03)",
+          borderBottom: `1px solid rgba(${rgb}, 0.08)`,
+        }}
       >
         <span className="w-2 h-2 rounded-full bg-red-500/60" />
         <span className="w-2 h-2 rounded-full bg-yellow-500/60" />
@@ -74,12 +90,15 @@ const CardSpotlight = ({ rgb }) => {
   const [active, setActive] = useState(false);
   const ref = useRef(null);
 
-  const handleMouseMove = useCallback((e) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    mouseX.set(e.clientX - rect.left);
-    mouseY.set(e.clientY - rect.top);
-  }, [mouseX, mouseY]);
+  const handleMouseMove = useCallback(
+    (e) => {
+      if (!ref.current) return;
+      const rect = ref.current.getBoundingClientRect();
+      mouseX.set(e.clientX - rect.left);
+      mouseY.set(e.clientY - rect.top);
+    },
+    [mouseX, mouseY],
+  );
 
   // attach to parent card
   useEffect(() => {
@@ -97,12 +116,10 @@ const CardSpotlight = ({ rgb }) => {
     };
   }, [handleMouseMove]);
 
-  const background = useTransform(
-    [mouseX, mouseY],
-    ([x, y]) =>
-      active
-        ? `radial-gradient(220px circle at ${x}px ${y}px, rgba(${rgb}, 0.09), transparent 70%)`
-        : "none"
+  const background = useTransform([mouseX, mouseY], ([x, y]) =>
+    active
+      ? `radial-gradient(220px circle at ${x}px ${y}px, rgba(${rgb}, 0.09), transparent 70%)`
+      : "none",
   );
 
   return (
@@ -120,23 +137,41 @@ const CardSpotlight = ({ rgb }) => {
 function useTilt(maxAngle = 10) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [maxAngle, -maxAngle]), { stiffness: 180, damping: 22 });
-  const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-maxAngle, maxAngle]), { stiffness: 180, damping: 22 });
+  const rotateX = useSpring(
+    useTransform(y, [-0.5, 0.5], [maxAngle, -maxAngle]),
+    { stiffness: 180, damping: 22 },
+  );
+  const rotateY = useSpring(
+    useTransform(x, [-0.5, 0.5], [-maxAngle, maxAngle]),
+    { stiffness: 180, damping: 22 },
+  );
 
-  const onMouseMove = useCallback((e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    x.set((e.clientX - rect.left) / rect.width - 0.5);
-    y.set((e.clientY - rect.top) / rect.height - 0.5);
+  const onMouseMove = useCallback(
+    (e) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      x.set((e.clientX - rect.left) / rect.width - 0.5);
+      y.set((e.clientY - rect.top) / rect.height - 0.5);
+    },
+    [x, y],
+  );
+
+  const onMouseLeave = useCallback(() => {
+    x.set(0);
+    y.set(0);
   }, [x, y]);
-
-  const onMouseLeave = useCallback(() => { x.set(0); y.set(0); }, [x, y]);
 
   return { rotateX, rotateY, onMouseMove, onMouseLeave };
 }
 
 // ─── Magnetic button ──────────────────────────────────────────────────────────
 
-const MagButton = ({ href, children, style, className, "aria-label": ariaLabel }) => {
+const MagButton = ({
+  href,
+  children,
+  style,
+  className,
+  "aria-label": ariaLabel,
+}) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const sx = useSpring(x, { stiffness: 260, damping: 22 });
@@ -149,7 +184,10 @@ const MagButton = ({ href, children, style, className, "aria-label": ariaLabel }
     x.set((e.clientX - (rect.left + rect.width / 2)) * 0.28);
     y.set((e.clientY - (rect.top + rect.height / 2)) * 0.28);
   };
-  const onMouseLeave = () => { x.set(0); y.set(0); };
+  const onMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
 
   return (
     <motion.a
@@ -187,7 +225,8 @@ const GradientBorder = ({ rgb, hovered }) => (
         borderRadius: "inherit",
         mask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
         maskComposite: "exclude",
-        WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
+        WebkitMask:
+          "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
         WebkitMaskComposite: "xor",
         padding: "1px",
       }}
@@ -240,7 +279,9 @@ const CardImage = ({ project, hovered, rotateX, rotateY }) => {
               transition={{ scale: { duration: 0.55, ease: "easeOut" } }}
               loading="lazy"
               onLoad={() => setLoaded(true)}
-              onError={(e) => { e.currentTarget.style.display = "none"; }}
+              onError={(e) => {
+                e.currentTarget.style.display = "none";
+              }}
             />
           </>
         ) : (
@@ -262,7 +303,9 @@ const CardImage = ({ project, hovered, rotateX, rotateY }) => {
       {/* Bottom fade into card body */}
       <div
         className="absolute inset-x-0 bottom-0 h-10 pointer-events-none z-10"
-        style={{ background: "linear-gradient(to top, rgba(6,10,14,1), transparent)" }}
+        style={{
+          background: "linear-gradient(to top, rgba(6,10,14,1), transparent)",
+        }}
       />
 
       {/* Year — top right */}
@@ -280,7 +323,7 @@ const CardImage = ({ project, hovered, rotateX, rotateY }) => {
 
 const BadgeRow = ({ project }) => {
   const status = STATUS_STYLE[project.status] ?? STATUS_STYLE.completed;
-  const meta   = TYPE_META[project.type]   ?? TYPE_META.solo;
+  const meta = TYPE_META[project.type] ?? TYPE_META.solo;
   const { Icon: TypeIcon } = meta;
   const sRgb = hexToRgb(status.color);
 
@@ -299,7 +342,12 @@ const BadgeRow = ({ project }) => {
         <motion.span
           className="w-1.5 h-1.5 rounded-full"
           style={{ background: status.color }}
-          animate={{ opacity: status.label === "Active" || status.label === "Live" ? [1, 0.3, 1] : 1 }}
+          animate={{
+            opacity:
+              status.label === "Active" || status.label === "Live"
+                ? [1, 0.3, 1]
+                : 1,
+          }}
           transition={{ duration: 1.6, repeat: Infinity }}
         />
         {status.label}
@@ -325,8 +373,8 @@ const BadgeRow = ({ project }) => {
 // ─── Tech chip section ────────────────────────────────────────────────────────
 
 const TechChips = ({ tech, color }) => {
-  const rgb  = hexToRgb(color);
-  const all  = Object.values(tech ?? {}).flat();
+  const rgb = hexToRgb(color);
+  const all = Object.values(tech ?? {}).flat();
   const show = all.slice(0, 5);
   const rest = all.length - 5;
 
@@ -393,7 +441,10 @@ const MetricsPanel = ({ metrics, color, open }) => {
                 >
                   {m.value}
                 </span>
-                <span className="text-[10px]" style={{ color: "rgba(255,255,255,0.3)" }}>
+                <span
+                  className="text-[10px]"
+                  style={{ color: "rgba(255,255,255,0.3)" }}
+                >
                   {m.label}
                 </span>
               </div>
@@ -407,60 +458,43 @@ const MetricsPanel = ({ metrics, color, open }) => {
 
 // ─── Action buttons ───────────────────────────────────────────────────────────
 
+const DisabledAction = ({ icon: Icon, label, variant }) => (
+  <span
+    aria-disabled="true"
+    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium select-none ${
+      variant === "live" ? "font-semibold" : ""
+    }`}
+    style={{
+      background: "rgba(255,255,255,0.03)",
+      border: "1px solid rgba(255,255,255,0.06)",
+      color: "rgba(255,255,255,0.18)",
+      cursor: "not-allowed",
+    }}
+  >
+    <Icon size={12} />
+    {label}
+  </span>
+);
+
 const CardActions = ({ project }) => {
-  const rgb = hexToRgb(project.color);
   return (
     <div
       className="flex items-center gap-2 pt-3.5 border-t"
       style={{ borderColor: "rgba(255,255,255,0.05)" }}
     >
       {project.github && (
-        <MagButton
-          href={project.github}
-          aria-label={`${project.title} source code on GitHub`}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium"
-          style={{
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.09)",
-            color: "rgba(255,255,255,0.42)",
-            transition: "color 0.2s, border-color 0.2s",
-          }}
-        >
-          <Github size={12} />
-          Code
-        </MagButton>
+        <DisabledAction icon={Github} label="Code" variant="code" />
       )}
 
       {project.live && (
-        <MagButton
-          href={project.live}
-          aria-label={`${project.title} live demo`}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-white relative overflow-hidden"
-          style={{
-            background: `linear-gradient(135deg, rgba(${rgb},0.45), rgba(${rgb},0.18))`,
-            border: `1px solid rgba(${rgb}, 0.35)`,
-            boxShadow: `0 0 16px rgba(${rgb}, 0.18)`,
-          }}
-        >
-          {/* Shine sweep */}
-          <motion.span
-            aria-hidden="true"
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background: "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.12) 50%, transparent 65%)",
-              backgroundSize: "200% 100%",
-            }}
-            animate={{ backgroundPosition: ["-100% 0", "200% 0"] }}
-            transition={{ duration: 2.2, repeat: Infinity, repeatDelay: 2.5, ease: "easeInOut" }}
-          />
-          <ExternalLink size={12} />
-          Live
-          <ArrowUpRight size={10} className="opacity-60" />
-        </MagButton>
+        <DisabledAction icon={ExternalLink} label="Live" variant="live" />
       )}
 
       {!project.github && !project.live && (
-        <span className="text-[10px]" style={{ color: "rgba(255,255,255,0.18)" }}>
+        <span
+          className="text-[10px]"
+          style={{ color: "rgba(255,255,255,0.18)" }}
+        >
           Private / NDA
         </span>
       )}
@@ -468,11 +502,74 @@ const CardActions = ({ project }) => {
   );
 };
 
+// ─── Action buttons ───────────────────────────────────────────────────────────
+
+// const CardActions = ({ project }) => {
+//   const rgb = hexToRgb(project.color);
+//   return (
+//     <div
+//       className="flex items-center gap-2 pt-3.5 border-t"
+//       style={{ borderColor: "rgba(255,255,255,0.05)" }}
+//     >
+//       {project.github && (
+//         <MagButton
+//           href={project.github}
+//           aria-label={`${project.title} source code on GitHub`}
+//           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium"
+//           style={{
+//             background: "rgba(255,255,255,0.04)",
+//             border: "1px solid rgba(255,255,255,0.09)",
+//             color: "rgba(255,255,255,0.42)",
+//             transition: "color 0.2s, border-color 0.2s",
+//           }}
+//         >
+//           <Github size={12} />
+//           Code
+//         </MagButton>
+//       )}
+
+//       {project.live && (
+//         <MagButton
+//           href={project.live}
+//           aria-label={`${project.title} live demo`}
+//           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-white relative overflow-hidden"
+//           style={{
+//             background: `linear-gradient(135deg, rgba(${rgb},0.45), rgba(${rgb},0.18))`,
+//             border: `1px solid rgba(${rgb}, 0.35)`,
+//             boxShadow: `0 0 16px rgba(${rgb}, 0.18)`,
+//           }}
+//         >
+//           {/* Shine sweep */}
+//           <motion.span
+//             aria-hidden="true"
+//             className="absolute inset-0 pointer-events-none"
+//             style={{
+//               background: "linear-gradient(105deg, transparent 35%, rgba(255,255,255,0.12) 50%, transparent 65%)",
+//               backgroundSize: "200% 100%",
+//             }}
+//             animate={{ backgroundPosition: ["-100% 0", "200% 0"] }}
+//             transition={{ duration: 2.2, repeat: Infinity, repeatDelay: 2.5, ease: "easeInOut" }}
+//           />
+//           <ExternalLink size={12} />
+//           Live
+//           <ArrowUpRight size={10} className="opacity-60" />
+//         </MagButton>
+//       )}
+
+//       {!project.github && !project.live && (
+//         <span className="text-[10px]" style={{ color: "rgba(255,255,255,0.18)" }}>
+//           Private / NDA
+//         </span>
+//       )}
+//     </div>
+//   );
+// };
+
 // ─── ProjectCard ──────────────────────────────────────────────────────────────
 
 const ProjectCard = ({ project }) => {
-  const [hovered, setHovered]       = useState(false);
-  const [expanded, setExpanded]     = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [expanded, setExpanded] = useState(false);
   const { rotateX, rotateY, onMouseMove, onMouseLeave } = useTilt(8);
   const rgb = hexToRgb(project.color);
   const hasMetrics = project.metrics?.length > 0;
@@ -480,7 +577,10 @@ const ProjectCard = ({ project }) => {
   return (
     <motion.article
       onMouseMove={onMouseMove}
-      onMouseLeave={() => { onMouseLeave(); setHovered(false); }}
+      onMouseLeave={() => {
+        onMouseLeave();
+        setHovered(false);
+      }}
       onMouseEnter={() => setHovered(true)}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
@@ -496,7 +596,10 @@ const ProjectCard = ({ project }) => {
           ? `0 20px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(${rgb},0.25), 0 0 40px rgba(${rgb},0.08)`
           : "0 2px 20px rgba(0,0,0,0.25)",
       }}
-      whileHover={{ y: -6, transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1] } }}
+      whileHover={{
+        y: -6,
+        transition: { duration: 0.28, ease: [0.22, 1, 0.36, 1] },
+      }}
       className="relative h-full flex flex-col rounded-2xl overflow-hidden
                  focus-within:ring-2 focus-within:ring-indigo-500
                  will-change-transform"
