@@ -303,7 +303,7 @@ const ProfileCard = () => {
             }}
           />
           <img
-            src="/images/profile.jpeg"
+            src="/images/profile.jpg"
             alt="Nahashon Mwendwa — Full-Stack Developer"
             className="absolute inset-0 w-full h-full rounded-full object-cover"
             style={{ border: "2px solid rgba(99,102,241,0.4)" }}
