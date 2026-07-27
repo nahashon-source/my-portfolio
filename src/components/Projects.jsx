@@ -847,29 +847,6 @@ const FeaturedCard = ({ project, index, reduceMotion }) => {
             className="flex flex-wrap items-center gap-2 pt-6"
             style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
           >
-            {project.github && (
-              <motion.a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${project.title} source code`}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e1420] focus-visible:ring-indigo-400 focus:outline-none"
-                style={{
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.08)",
-                  color: "rgba(255,255,255,0.42)",
-                }}
-                whileHover={{
-                  scale: 1.04,
-                  color: "#fff",
-                  borderColor: "rgba(255,255,255,0.2)",
-                }}
-                whileTap={{ scale: 0.96 }}
-              >
-                <Github size={13} aria-hidden="true" />
-                Source code
-              </motion.a>
-            )}
             {project.live && (
               <motion.a
                 href={project.live}
@@ -1056,24 +1033,6 @@ const GridCard = ({ project, index, reduceMotion }) => {
           className="flex items-center gap-2 mt-4 pt-4"
           style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}
         >
-          {project.github && (
-            <motion.a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${project.title} GitHub`}
-              className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0e1420] focus-visible:ring-indigo-400 focus:outline-none"
-              style={{
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.07)",
-                color: "rgba(255,255,255,0.35)",
-              }}
-              whileHover={{ scale: 1.04, color: "#fff" }}
-              whileTap={{ scale: 0.96 }}
-            >
-              <Github size={11} aria-hidden="true" /> Code
-            </motion.a>
-          )}
           {project.live ? (
             <motion.a
               href={project.live}

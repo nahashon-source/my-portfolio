@@ -14,8 +14,7 @@ import {
 } from "lucide-react";
 import CountUp from "react-countup";
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
-
+// ─── Data ───
 const TIMELINE = [
   {
     year: "2021",
