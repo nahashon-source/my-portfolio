@@ -636,6 +636,8 @@ const Hero = () => (
             architecture.
           </motion.p>
 
+          <div></div>
+
           {/* Stats */}
           <motion.div
             {...fadeUp(0.28)}
